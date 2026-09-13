@@ -78,7 +78,7 @@
   .q.revealed .opsi div.selected.wrong{ background:var(--wrong-bg); border-color:var(--wrong-border); }
   .huruf{ font-family:'Inter',sans-serif; font-size:12.5px; font-weight:600; color:var(--ink-soft); margin-inline-end:8px; }
 
-  .navbar{ position:sticky; bottom:0; background:var(--paper); border-top:1px solid var(--paper-line); padding:12px 20px; display:flex; direction:ltr; gap:10px; justify-content:flex-end; flex-wrap:wrap; }
+  .navbar{ position:sticky; bottom:0; background:var(--paper); border-top:1px solid var(--paper-line); padding:12px 20px; display:flex; direction:ltr; gap:10px; flex-wrap:wrap; }
   .navbar .btn{ width:auto; }
 
   #result-screen main{ direction:ltr; text-align:center; padding-top:60px; }
@@ -94,7 +94,7 @@
     <h1>Try Out 2 — Tes Hamzah</h1>
     <div class="sub">Login menggunakan email untuk memulai</div>
     <div class="maklumat">
-      <b>Maklumat قبل العمل:</b>
+      <b>Maklumat sebelum mengerjakan:</b>
       <ol>
         <li>Try Out ini terdiri dari <b>150 soal</b>: 50 Fahmul Masmu', 50 Tarakib, 50 Maqru'.</li>
         <li>Setiap halaman berisi <b>5 soal</b>. Jawab semua soal di halaman tersebut sebelum lanjut.</li>
@@ -128,9 +128,13 @@
   </header>
   <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
   <main id="quiz-main"></main>
-  <div class="navbar">
-    <button class="btn secondary" id="reveal-btn" disabled style="width:auto;">Lihat Jawaban</button>
-    <button class="btn" id="next-btn" disabled style="width:auto;">Halaman Selanjutnya</button>
+  
+  <div class="navbar" style="justify-content: space-between;">
+    <button class="btn secondary" id="prev-btn" disabled style="width:auto;">Halaman Sebelumnya</button>
+    <div style="display:flex; gap:10px;">
+      <button class="btn secondary" id="reveal-btn" disabled style="width:auto;">Lihat Jawaban</button>
+      <button class="btn" id="next-btn" disabled style="width:auto;">Halaman Selanjutnya</button>
+    </div>
   </div>
 </div>
 
@@ -340,12 +344,8 @@ const MASMU = [
 /* ---------- BUILD PAGES ---------- */
 const PAGES = [];
 MASMU.forEach((passage, pi)=>{
-  PAGES.push({ 
-    section:'masmu', 
-    lvl:passage.lvl, 
-    audio:passage.audio, // Teks transkrip telah digantikan oleh audio
-    items: passage.questions.map((q,qi)=>({...q, qid:'masmu-'+pi+'-'+qi})) 
-  });
+  PAGES.push({ section:'masmu', lvl:passage.lvl, audio:passage.audio,
+    items: passage.questions.map((q,qi)=>({...q, qid:'masmu-'+pi+'-'+qi})) });
 });
 for(let i=0;i<TARAKIB.length;i+=5){
   PAGES.push({ section:'tarakib', items: TARAKIB.slice(i,i+5).map((q,idx)=>({...q, qid:'tarakib-'+(i+idx)})) });
@@ -398,10 +398,8 @@ function lockQuiz(){
   }, 2200);
 }
 
-/* --- LOGIKA PASSWORD ACAK (Satu kali klik, password selalu baru) --- */
 function genPassword(){
   let letters = '';
-  // Menghasilkan 5 huruf acak secara langsung tanpa bergantung pada email
   for(let i=0;i<5;i++){
     letters += String.fromCharCode(65 + Math.floor(Math.random() * 26)); 
   }
@@ -422,7 +420,6 @@ getPwBtn.addEventListener('click', ()=>{
   const email = emailInput.value.trim();
   if(!email || !email.includes('@')){ alert('Masukkan email yang valid.'); return; }
   userEmail = email;
-  // Menghasilkan password yang selalu baru berapapun/siapapun email yang dimasukkan
   generatedPw = genPassword();
   pwDisplay.textContent = generatedPw;
   pwBox.classList.add('show');
@@ -461,7 +458,6 @@ function renderPage(){
   if(page.audio){
     const p = document.createElement('div');
     p.className = 'passage';
-    // Menampilkan audio player, teks cerita telah ditiadakan
     p.innerHTML = `<div class="tlabel">🔊 Audio Fahmul Masmu'</div><audio controls src="${page.audio}" style="width:100%;"></audio>`;
     main.appendChild(p);
   }
@@ -524,15 +520,24 @@ function pageAnsweredCount(){
 function updateNav(){
   const page = PAGES[currentPage];
   const allAnswered = pageAnsweredCount() === page.items.length;
+  const prevBtn = document.getElementById('prev-btn');
   const revealBtn = document.getElementById('reveal-btn');
   const nextBtn = document.getElementById('next-btn');
+  
+  prevBtn.disabled = (currentPage === 0);
   revealBtn.disabled = !allAnswered || revealedPages.has(currentPage);
   revealBtn.textContent = revealedPages.has(currentPage) ? 'Jawaban Ditampilkan' : 'Lihat Jawaban';
-  // MODE CEK SEMENTARA: syarat "harus jawab semua dulu" untuk pindah halaman dimatikan.
-  // Untuk mengembalikan aturan asli, ganti baris di bawah ini menjadi: nextBtn.disabled = !allAnswered;
   nextBtn.disabled = false;
   nextBtn.textContent = (currentPage === PAGES.length-1) ? 'Selesai & Lihat Nilai' : 'Halaman Selanjutnya';
 }
+
+document.getElementById('prev-btn').addEventListener('click', ()=>{
+  if(locked) return;
+  if(currentPage > 0){
+    currentPage--;
+    renderPage();
+  }
+});
 
 document.getElementById('reveal-btn').addEventListener('click', ()=>{
   if(locked) return;
