@@ -7,6 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Naskh+Arabic:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!-- Tambahan Library untuk cetak PDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <style>
   :root{
     --paper:#f6f2e9; --paper-line:#e4dcc8; --ink:#2b2a25; --ink-soft:#6b6558;
@@ -44,15 +46,9 @@
   header .pagepos{ font-size:13px; font-weight:600; }
   header .timer{ font-size:14px; font-weight:700; color:var(--accent); font-family:'Inter',monospace; }
   header .timer.low{ color:var(--wrong-border); }
-  #timeup-overlay{
-    display:none; position:fixed; inset:0; background:rgba(43,42,37,0.55); z-index:100;
-    align-items:center; justify-content:center; direction:ltr;
-  }
+  #timeup-overlay{ display:none; position:fixed; inset:0; background:rgba(43,42,37,0.55); z-index:100; align-items:center; justify-content:center; direction:ltr; }
   #timeup-overlay.show{ display:flex; }
-  #timeup-overlay .box{
-    background:var(--card); border-radius:12px; padding:24px 28px; max-width:320px; text-align:center;
-    font-size:14px; line-height:1.6;
-  }
+  #timeup-overlay .box{ background:var(--card); border-radius:12px; padding:24px 28px; max-width:320px; text-align:center; font-size:14px; line-height:1.6; }
   #timeup-overlay .box b{ display:block; font-size:17px; margin-bottom:8px; color:var(--wrong-border); }
   .progress-track{ width:100%; height:5px; background:var(--paper-line); }
   .progress-fill{ height:100%; background:var(--accent); width:0%; transition:width .2s ease; }
@@ -81,10 +77,12 @@
   .navbar{ position:sticky; bottom:0; background:var(--paper); border-top:1px solid var(--paper-line); padding:12px 20px; display:flex; direction:ltr; gap:10px; flex-wrap:wrap; }
   .navbar .btn{ width:auto; }
 
-  #result-screen main{ direction:ltr; text-align:center; padding-top:60px; }
+  #result-screen{ padding:40px 20px; }
+  #result-content{ background:var(--card); padding:30px; border-radius:12px; border:1px solid var(--paper-line); max-width:400px; margin:0 auto; direction:ltr; text-align:center; }
   .score-big{ font-size:52px; font-weight:700; color:var(--accent); margin:10px 0; }
-  .score-table{ text-align:left; max-width:320px; margin:20px auto; font-size:14px; }
-  .score-table div{ display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--paper-line); }
+  .score-table{ text-align:left; margin:20px auto 0; font-size:14px; }
+  .score-table div{ display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--paper-line); }
+  .action-buttons{ max-width:400px; margin:20px auto; display:flex; flex-direction:column; gap:10px; }
 </style>
 </head>
 <body>
@@ -96,7 +94,7 @@
     <div class="maklumat">
       <b>Maklumat sebelum mengerjakan:</b>
       <ol>
-        <li>Try Out ini terdiri dari <b>150 soal</b>: 50 Fahmul Masmu', 50 Tarakib, 50 المفردات وفهم المعنى.</li>
+        <li>Try Out ini terdiri dari <b>150 soal</b>: 50 Istima', 50 Tarakib, 50 Mufrodat.</li>
         <li>Setiap halaman berisi <b>5 soal</b>. Jawab semua soal di halaman tersebut sebelum lanjut.</li>
         <li>Tombol "Lihat Jawaban" aktif setelah kelima soal dijawab, menampilkan jawaban benar (hijau) dan jawaban salah yang dipilih (merah).</li>
         <li>Jawaban tidak dapat diubah lagi setelah ditampilkan kunci jawabannya.</li>
@@ -146,18 +144,26 @@
 </div>
 
 <div class="screen" id="result-screen">
-  <main>
-    <div style="font-size:14px;color:var(--ink-soft);">Try Out 2 Selesai</div>
+  <!-- Elemen ini yang akan dicetak ke PDF -->
+  <div id="result-content">
+    <div style="font-size:14px;color:var(--ink-soft);">Hasil Try Out 2 — Tes Hamzah</div>
+    <div style="font-size:15px; font-weight:700; margin-top:8px; word-break: break-all;" id="result-email-label"></div>
     <div class="score-big" id="score-big">0/150</div>
     <div class="score-table" id="score-table"></div>
-    <button class="btn" style="max-width:220px;margin:20px auto;" id="restart-btn">Ulangi Try Out</button>
-  </main>
+  </div>
+  
+  <div class="action-buttons">
+    <button class="btn" id="download-pdf-btn">Unduh Hasil (PDF)</button>
+    <button class="btn secondary" id="send-email-btn">Kirim ke Email Saya</button>
+    <button class="btn secondary" id="restart-btn" style="margin-top:20px;">Ulangi Try Out</button>
+  </div>
 </div>
 
 <script>
 const HURUF = ["A","B","C","D","E","F"];
 const LVL_LABEL = {mudah:"Mudah", sedang:"Sedang", sulit:"Sulit"};
-const SECTION_LABEL = {masmu:"Fahmul Masmu'", tarakib:"Tarakib", maqru:"المفردات وفهم المعنى"};
+// PERUBAHAN: Nama Kategori diperbarui di sini
+const SECTION_LABEL = {masmu:"Istima'", tarakib:"Tarakib", maqru:"Mufrodat"};
 
 /* ---------- TARAKIB TO2 ---------- */
 const TARAKIB = [
@@ -450,6 +456,8 @@ function renderPage(){
   const page = PAGES[currentPage];
   const main = document.getElementById('quiz-main');
   main.innerHTML = '';
+  
+  // PERUBAHAN: Tag Kategori Menyesuaikan SECTION_LABEL
   const tag = document.createElement('div');
   tag.className = 'section-tag';
   tag.textContent = SECTION_LABEL[page.section];
@@ -458,7 +466,8 @@ function renderPage(){
   if(page.audio){
     const p = document.createElement('div');
     p.className = 'passage';
-    p.innerHTML = `<div class="tlabel">🔊 Audio Fahmul Masmu'</div><audio controls src="${page.audio}" style="width:100%;"></audio>`;
+    // PERUBAHAN: Label audio menjadi Istima'
+    p.innerHTML = `<div class="tlabel">🔊 Audio Istima'</div><audio controls src="${page.audio}" style="width:100%;"></audio>`;
     main.appendChild(p);
   }
   
@@ -559,6 +568,10 @@ function showResult(){
   if(timerInterval) clearInterval(timerInterval);
   document.getElementById('quiz-screen').classList.remove('active');
   document.getElementById('result-screen').classList.add('active');
+  
+  // Tampilkan Email Peserta di Halaman Hasil
+  document.getElementById('result-email-label').textContent = userEmail;
+
   let totalCorrect = 0;
   const bySection = { masmu:{c:0,t:0}, tarakib:{c:0,t:0}, maqru:{c:0,t:0} };
   PAGES.forEach(page=>{
@@ -567,6 +580,7 @@ function showResult(){
       if(answers[q.qid] === q.correct){ totalCorrect++; bySection[page.section].c++; }
     });
   });
+  
   document.getElementById('score-big').textContent = totalCorrect + '/' + TOTAL_Q;
   const table = document.getElementById('score-table');
   table.innerHTML = '';
@@ -576,6 +590,30 @@ function showResult(){
     table.appendChild(row);
   });
 }
+
+// FUNGSI UNDUH PDF
+document.getElementById('download-pdf-btn').addEventListener('click', ()=>{
+  const element = document.getElementById('result-content');
+  const opt = {
+    margin:       [0.5, 0.5, 0.5, 0.5],
+    filename:     'Hasil_TryOut2_' + userEmail + '.pdf',
+    image:        { type: 'jpeg', quality: 0.98 },
+    html2canvas:  { scale: 2 },
+    jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+  };
+  // Library akan mencetak elemen ber-ID 'result-content' menjadi PDF
+  html2pdf().set(opt).from(element).save();
+});
+
+// FUNGSI KIRIM EMAIL
+document.getElementById('send-email-btn').addEventListener('click', ()=>{
+  const score = document.getElementById('score-big').textContent;
+  const subject = encodeURIComponent("Hasil Try Out 2 - Tes Hamzah");
+  const body = encodeURIComponent(`Halo,\n\nBerikut adalah hasil Try Out 2 Anda:\n\nEmail Peserta: ${userEmail}\nSkor Total: ${score}\n\nTerima kasih telah mengikuti Try Out.`);
+  
+  // Membuka aplikasi email bawaan peserta dengan pesan yang sudah terisi otomatis
+  window.location.href = `mailto:${userEmail}?subject=${subject}&body=${body}`;
+});
 
 document.getElementById('restart-btn').addEventListener('click', ()=>{
   currentPage = 0;
