@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Try Out 1 — Tes Hamzah (Revisi Final Terverifikasi)</title>
+<title>Try Out 1 — Tes Hamzah (Bebas Waktu Login)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Naskh+Arabic:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -30,10 +30,6 @@
   .maklumat{ background:var(--accent-soft); border:1px solid var(--accent); border-radius:8px; padding:14px 16px; font-size:12.8px; line-height:1.7; color:var(--ink); margin-bottom:20px; }
   .maklumat b{ color:var(--accent); }
   .maklumat ol{ margin:8px 0 0; padding-inline-start:18px; }
-  
-  #access-status { text-align: center; margin-bottom: 20px; font-size: 13.5px; line-height: 1.6; }
-  .timer-countdown { font-size: 22px; font-weight: 700; color: var(--accent); font-family: 'Inter', monospace; margin-top: 8px; display: inline-block; letter-spacing: 1px; direction: ltr; }
-  .closed-text { color: var(--wrong-border); font-weight: bold; font-size: 16px; }
 
   label{ font-size:12.5px; font-weight:600; color:var(--ink-soft); display:block; margin-bottom:6px; }
   input[type=email], input[type=text]{ width:100%; padding:10px 12px; border-radius:7px; border:1px solid var(--paper-line); font-family:'Inter',sans-serif; font-size:14px; margin-bottom:14px; background:var(--paper); direction:ltr; text-align:left; }
@@ -97,9 +93,7 @@
 <div class="screen active" id="login-screen">
   <div class="login-card">
     <h1>Try Out 1 — Tes Hamzah</h1>
-    <div class="sub">Login menggunakan email untuk memulai (Versi Bebas Error)</div>
-    
-    <div class="maklumat" id="access-status"></div>
+    <div class="sub">Login menggunakan email untuk memulai</div>
 
     <div class="maklumat">
       <b>Maklumat sebelum mengerjakan:</b>
@@ -112,7 +106,7 @@
       </ol>
     </div>
 
-    <div id="login-form-area" style="display:none;">
+    <div id="login-form-area">
       <label for="email-input">Email Anda</label>
       <input type="email" id="email-input" placeholder="nama@email.com">
       <button class="btn" id="get-pw-btn">Dapatkan Password</button>
@@ -173,41 +167,6 @@
 </div>
 
 <script>
-const EXAM_START_UTC = "2026-09-16T13:10:00Z"; 
-const EXAM_END_UTC   = "2026-09-16T17:10:00Z";
-
-const startMs = new Date(EXAM_START_UTC).getTime();
-const endMs = new Date(EXAM_END_UTC).getTime();
-
-function updateAccessStatus() {
-  const now = Date.now();
-  const statusEl = document.getElementById('access-status');
-  const loginFormEl = document.getElementById('login-form-area');
-  
-  if (now < startMs) {
-    const diff = startMs - now;
-    const h = Math.floor(diff / (1000 * 60 * 60));
-    const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    const s = Math.floor((diff % (1000 * 60)) / 1000);
-    
-    statusEl.innerHTML = `<b>Ujian belum dimulai!</b><br>Try Out dibuka Pukul 20.10 WIB dalam:<br><span class="timer-countdown">${h}j ${m}m ${s}d</span>`;
-    loginFormEl.style.display = 'none';
-  } else if (now >= startMs && now <= endMs) {
-    statusEl.innerHTML = `<b>Ujian telah dibuka!</b><br>Batas waktu login hingga pukul 00.10 WIB.`;
-    statusEl.style.background = 'var(--correct-bg)';
-    statusEl.style.borderColor = 'var(--correct-border)';
-    loginFormEl.style.display = 'block';
-  } else {
-    statusEl.innerHTML = `<span class="closed-text">Waktu login ditutup!</span>`;
-    statusEl.style.background = 'var(--wrong-bg)';
-    statusEl.style.borderColor = 'var(--wrong-border)';
-    loginFormEl.style.display = 'none';
-  }
-}
-setInterval(updateAccessStatus, 1000);
-updateAccessStatus();
-
-/* KUNCI JAWABAN REVISI AUDIT TOTAL (100% Sesuai Kaidah) */
 const HURUF = ["A","B","C","D","E"];
 const LVL_LABEL = {mudah:"Mudah", sedang:"Sedang", sulit:"Sulit"};
 const SECTION_LABEL = {masmu:"Istima'", tarakib:"Tarakib", maqru:"Mufrodat"};
@@ -391,7 +350,6 @@ const MASMU = [
 ]},
 ];
 
-/* ---------- BUILD PAGES ---------- */
 const PAGES = [];
 MASMU.forEach((passage, pi)=>{
   PAGES.push({ section:'masmu', lvl:passage.lvl, audio:passage.audio,
@@ -519,7 +477,6 @@ function renderPage(){
     div.dataset.correct = q.correct;
     const globalNum = getGlobalNum(q.qid);
     
-    // Keamanan ekstra untuk memastikan hanya tepat 5 opsi yang tergenerate (A, B, C, D, E)
     const optsHtml = q.opts.slice(0, 5).map((o,i2)=>`<div data-idx="${i2}"><span class="huruf">${HURUF[i2]}</span>${o}</div>`).join('');
     
     div.innerHTML = `
