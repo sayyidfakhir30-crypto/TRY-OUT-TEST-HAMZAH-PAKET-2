@@ -3,11 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Try Out 2 — Tes Hamzah</title>
+<title>Try Out 1 — Tes Hamzah (Revisi Final Terverifikasi)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Naskh+Arabic:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<!-- Tambahan Library untuk cetak PDF -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <style>
   :root{
@@ -20,50 +19,58 @@
     --card:#fffdf8;
   }
   *{box-sizing:border-box;}
-  body{ margin:0; background:var(--paper); color:var(--ink); font-family:'Inter',sans-serif; direction:ltr; }
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:'Inter',sans-serif; direction:rtl; text-align:right; }
   .screen{ display:none; min-height:100vh; }
   .screen.active{ display:block; }
 
   #login-screen.active{ display:flex; align-items:center; justify-content:center; padding:24px; }
-  .login-card{ background:var(--card); border:1px solid var(--paper-line); border-radius:14px; padding:28px 26px; max-width:440px; width:100%; }
+  .login-card{ background:var(--card); border:1px solid var(--paper-line); border-radius:14px; padding:28px 26px; max-width:440px; width:100%; text-align:right; }
   .login-card h1{ font-size:19px; margin:0 0 4px; }
   .login-card .sub{ font-size:12.5px; color:var(--ink-soft); margin-bottom:18px; }
   .maklumat{ background:var(--accent-soft); border:1px solid var(--accent); border-radius:8px; padding:14px 16px; font-size:12.8px; line-height:1.7; color:var(--ink); margin-bottom:20px; }
   .maklumat b{ color:var(--accent); }
   .maklumat ol{ margin:8px 0 0; padding-inline-start:18px; }
+  
+  #access-status { text-align: center; margin-bottom: 20px; font-size: 13.5px; line-height: 1.6; }
+  .timer-countdown { font-size: 22px; font-weight: 700; color: var(--accent); font-family: 'Inter', monospace; margin-top: 8px; display: inline-block; letter-spacing: 1px; direction: ltr; }
+  .closed-text { color: var(--wrong-border); font-weight: bold; font-size: 16px; }
+
   label{ font-size:12.5px; font-weight:600; color:var(--ink-soft); display:block; margin-bottom:6px; }
-  input[type=email], input[type=text]{ width:100%; padding:10px 12px; border-radius:7px; border:1px solid var(--paper-line); font-family:'Inter',sans-serif; font-size:14px; margin-bottom:14px; background:var(--paper); }
+  input[type=email], input[type=text]{ width:100%; padding:10px 12px; border-radius:7px; border:1px solid var(--paper-line); font-family:'Inter',sans-serif; font-size:14px; margin-bottom:14px; background:var(--paper); direction:ltr; text-align:left; }
   input:focus{ outline:2px solid var(--accent); outline-offset:1px; }
   .btn{ font-family:'Inter',sans-serif; font-size:14px; font-weight:600; padding:11px 18px; border-radius:8px; border:1px solid var(--accent); background:var(--accent); color:#fff; cursor:pointer; width:100%; }
   .btn:disabled{ background:var(--card); color:var(--ink-soft); border-color:var(--paper-line); cursor:not-allowed; }
   .btn.secondary{ background:var(--card); color:var(--accent); }
   .pw-box{ background:var(--paper); border:1.5px dashed var(--correct-border); border-radius:8px; padding:12px 14px; margin-bottom:14px; font-size:13px; display:none; }
   .pw-box.show{ display:block; }
-  .pw-box .pw{ font-size:20px; font-weight:700; letter-spacing:4px; color:var(--accent); font-family:'Inter',monospace; }
+  .pw-box .pw{ font-size:20px; font-weight:700; letter-spacing:4px; color:var(--accent); font-family:'Inter',monospace; direction:ltr; display:inline-block; }
 
   header{ position:sticky; top:0; z-index:10; background:var(--paper); border-bottom:1px solid var(--paper-line); padding:12px 20px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; }
   header .who{ font-size:12px; color:var(--ink-soft); }
   header .pagepos{ font-size:13px; font-weight:600; }
-  header .timer{ font-size:14px; font-weight:700; color:var(--accent); font-family:'Inter',monospace; }
+  header .timer{ font-size:14px; font-weight:700; color:var(--accent); font-family:'Inter',monospace; direction:ltr; }
   header .timer.low{ color:var(--wrong-border); }
-  #timeup-overlay{ display:none; position:fixed; inset:0; background:rgba(43,42,37,0.55); z-index:100; align-items:center; justify-content:center; direction:ltr; }
+  
+  #timeup-overlay{ display:none; position:fixed; inset:0; background:rgba(43,42,37,0.55); z-index:100; align-items:center; justify-content:center; direction:rtl; }
   #timeup-overlay.show{ display:flex; }
   #timeup-overlay .box{ background:var(--card); border-radius:12px; padding:24px 28px; max-width:320px; text-align:center; font-size:14px; line-height:1.6; }
   #timeup-overlay .box b{ display:block; font-size:17px; margin-bottom:8px; color:var(--wrong-border); }
+  
   .progress-track{ width:100%; height:5px; background:var(--paper-line); }
   .progress-fill{ height:100%; background:var(--accent); width:0%; transition:width .2s ease; }
 
-  main{ max-width:720px; margin:0 auto; padding:24px 20px 100px; direction:rtl; }
-  .section-tag{ direction:ltr; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:var(--accent); margin-bottom:10px; }
+  main{ max-width:720px; margin:0 auto; padding:24px 20px 100px; }
+  .section-tag{ font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:var(--accent); margin-bottom:10px; direction:ltr; text-align:left; }
 
   .passage{ background:var(--card); border:1px solid var(--paper-line); border-radius:10px; padding:16px 18px; margin-bottom:16px; }
-  .passage .tlabel{ direction:ltr; font-size:11px; font-weight:600; color:var(--ink-soft); margin-bottom:8px; }
+  .passage .tlabel{ font-size:11px; font-weight:600; color:var(--ink-soft); margin-bottom:8px; direction:ltr; text-align:left; }
 
   .q{ background:var(--card); border:1px solid var(--paper-line); border-radius:10px; padding:18px 20px; margin-bottom:14px; }
-  .q-head{ display:flex; justify-content:space-between; direction:ltr; margin-bottom:8px; }
+  .q-head{ display:flex; justify-content:space-between; margin-bottom:8px; }
   .q-num{ font-size:12px; font-weight:600; color:var(--ink-soft); }
-  .lvl{ font-size:10.5px; font-weight:600; padding:2px 8px; border-radius:20px; color:#fff; direction:ltr; }
+  .lvl{ font-size:10.5px; font-weight:600; padding:2px 8px; border-radius:20px; color:#fff; }
   .lvl.mudah{ background:var(--mudah); } .lvl.sedang{ background:var(--sedang); } .lvl.sulit{ background:var(--sulit); }
+  
   .soal{ font-family:'Amiri','Noto Naskh Arabic',serif; font-size:21px; line-height:2; margin-bottom:12px; }
   .opsi{ display:grid; gap:8px; }
   .opsi div{ font-family:'Amiri','Noto Naskh Arabic',serif; font-size:17px; padding:9px 12px; border-radius:6px; border:1px solid var(--paper-line); background:var(--paper); cursor:pointer; display:flex; align-items:center; }
@@ -72,15 +79,15 @@
   .q.revealed .opsi div{ cursor:default; }
   .q.revealed .opsi div.correct{ background:var(--correct-bg); border-color:var(--correct-border); font-weight:700; }
   .q.revealed .opsi div.selected.wrong{ background:var(--wrong-bg); border-color:var(--wrong-border); }
-  .huruf{ font-family:'Inter',sans-serif; font-size:12.5px; font-weight:600; color:var(--ink-soft); margin-inline-end:8px; }
+  .huruf{ font-family:'Inter',sans-serif; font-size:12.5px; font-weight:600; color:var(--ink-soft); margin-inline-end:8px; direction:ltr; display:inline-block; }
 
-  .navbar{ position:sticky; bottom:0; background:var(--paper); border-top:1px solid var(--paper-line); padding:12px 20px; display:flex; direction:ltr; gap:10px; flex-wrap:wrap; }
+  .navbar{ position:sticky; bottom:0; background:var(--paper); border-top:1px solid var(--paper-line); padding:12px 20px; display:flex; gap:10px; flex-wrap:wrap; justify-content: space-between; }
   .navbar .btn{ width:auto; }
 
-  #result-screen{ padding:40px 20px; }
-  #result-content{ background:var(--card); padding:30px; border-radius:12px; border:1px solid var(--paper-line); max-width:400px; margin:0 auto; direction:ltr; text-align:center; }
+  #result-screen{ padding:40px 20px; text-align:center; }
+  #result-content{ background:var(--card); padding:30px; border-radius:12px; border:1px solid var(--paper-line); max-width:400px; margin:0 auto; text-align:center; }
   .score-big{ font-size:52px; font-weight:700; color:var(--accent); margin:10px 0; }
-  .score-table{ text-align:left; margin:20px auto 0; font-size:14px; }
+  .score-table{ text-align:right; margin:20px auto 0; font-size:14px; }
   .score-table div{ display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--paper-line); }
   .action-buttons{ max-width:400px; margin:20px auto; display:flex; flex-direction:column; gap:10px; }
 </style>
@@ -89,31 +96,38 @@
 
 <div class="screen active" id="login-screen">
   <div class="login-card">
-    <h1>Try Out 2 — Tes Hamzah</h1>
-    <div class="sub">Login menggunakan email untuk memulai</div>
+    <h1>Try Out 1 — Tes Hamzah</h1>
+    <div class="sub">Login menggunakan email untuk memulai (Versi Bebas Error)</div>
+    
+    <div class="maklumat" id="access-status"></div>
+
     <div class="maklumat">
       <b>Maklumat sebelum mengerjakan:</b>
       <ol>
         <li>Try Out ini terdiri dari <b>150 soal</b>: 50 Istima', 50 Tarakib, 50 Mufrodat.</li>
-        <li>Setiap halaman berisi <b>5 soal</b>. Jawab semua soal di halaman tersebut sebelum lanjut.</li>
-        <li>Tombol "Lihat Jawaban" aktif setelah kelima soal dijawab, menampilkan jawaban benar (hijau) dan jawaban salah yang dipilih (merah).</li>
-        <li>Jawaban tidak dapat diubah lagi setelah ditampilkan kunci jawabannya.</li>
-        <li>Nilai akhir akan muncul otomatis setelah seluruh 150 soal selesai.</li>
+        <li>Setiap halaman berisi <b>5 soal</b>. Jawab semua soal sebelum lanjut.</li>
+        <li>Tombol "Lihat Jawaban" aktif setelah kelima soal dijawab, menampilkan jawaban benar (hijau) dan salah (merah).</li>
+        <li>Waktu pengerjaan <b>100 menit</b> dihitung dari Anda menekan tombol mulai.</li>
         <li>Kerjakan sendiri, jujur, dan tanpa bantuan pihak lain.</li>
       </ol>
     </div>
-    <label for="email-input">Email Anda</label>
-    <input type="email" id="email-input" placeholder="nama@email.com">
-    <button class="btn" id="get-pw-btn">Dapatkan Password</button>
-    <div class="pw-box" id="pw-box">
-      Password Anda: <span class="pw" id="pw-display"></span><br>
-      <span style="font-size:11.5px;color:var(--ink-soft);">Gunakan password acak ini untuk masuk.</span>
-    </div>
-    <div id="pw-login-area" style="display:none;">
-      <label for="pw-input">Masukkan Password</label>
-      <input type="text" id="pw-input" placeholder="Masukkan password di atas" maxlength="5" style="text-transform:uppercase;">
-      <button class="btn" id="login-btn">Login &amp; Mulai Try Out</button>
-      <div id="login-error" style="color:var(--wrong-border); font-size:12px; margin-top:-8px; margin-bottom:8px; display:none;">Password salah, cek kembali.</div>
+
+    <div id="login-form-area" style="display:none;">
+      <label for="email-input">Email Anda</label>
+      <input type="email" id="email-input" placeholder="nama@email.com">
+      <button class="btn" id="get-pw-btn">Dapatkan Password</button>
+      
+      <div class="pw-box" id="pw-box">
+        Password Anda: <span class="pw" id="pw-display"></span><br>
+        <span style="font-size:11.5px;color:var(--ink-soft);">Gunakan password acak ini untuk masuk.</span>
+      </div>
+      
+      <div id="pw-login-area" style="display:none;">
+        <label for="pw-input">Masukkan Password</label>
+        <input type="text" id="pw-input" placeholder="Masukkan password di atas" maxlength="5" style="text-transform:uppercase;">
+        <button class="btn" id="login-btn">Login &amp; Mulai Try Out</button>
+        <div id="login-error" style="color:var(--wrong-border); font-size:12px; margin-top:-8px; margin-bottom:8px; display:none;">Password salah, cek kembali.</div>
+      </div>
     </div>
   </div>
 </div>
@@ -127,11 +141,11 @@
   <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
   <main id="quiz-main"></main>
   
-  <div class="navbar" style="justify-content: space-between;">
-    <button class="btn secondary" id="prev-btn" disabled style="width:auto;">Halaman Sebelumnya</button>
+  <div class="navbar">
+    <button class="btn secondary" id="prev-btn" disabled>Halaman Sebelumnya</button>
     <div style="display:flex; gap:10px;">
-      <button class="btn secondary" id="reveal-btn" disabled style="width:auto;">Lihat Jawaban</button>
-      <button class="btn" id="next-btn" disabled style="width:auto;">Halaman Selanjutnya</button>
+      <button class="btn secondary" id="reveal-btn" disabled>Lihat Jawaban</button>
+      <button class="btn" id="next-btn" disabled>Halaman Selanjutnya</button>
     </div>
   </div>
 </div>
@@ -139,14 +153,13 @@
 <div id="timeup-overlay">
   <div class="box">
     <b>Waktu Habis</b>
-    Waktu pengerjaan 100 menit telah selesai. Try Out otomatis diakhiri dan nilai Anda dihitung berdasarkan jawaban yang sudah terisi.
+    Waktu pengerjaan 100 menit telah selesai. Try Out otomatis diakhiri.
   </div>
 </div>
 
 <div class="screen" id="result-screen">
-  <!-- Elemen ini yang akan dicetak ke PDF -->
   <div id="result-content">
-    <div style="font-size:14px;color:var(--ink-soft);">Hasil Try Out 2 — Tes Hamzah</div>
+    <div style="font-size:14px;color:var(--ink-soft);">Hasil Try Out 1 — Tes Hamzah</div>
     <div style="font-size:15px; font-weight:700; margin-top:8px; word-break: break-all;" id="result-email-label"></div>
     <div class="score-big" id="score-big">0/150</div>
     <div class="score-table" id="score-table"></div>
@@ -160,190 +173,221 @@
 </div>
 
 <script>
-const HURUF = ["A","B","C","D","E","F"];
+const EXAM_START_UTC = "2026-09-16T13:10:00Z"; 
+const EXAM_END_UTC   = "2026-09-16T17:10:00Z";
+
+const startMs = new Date(EXAM_START_UTC).getTime();
+const endMs = new Date(EXAM_END_UTC).getTime();
+
+function updateAccessStatus() {
+  const now = Date.now();
+  const statusEl = document.getElementById('access-status');
+  const loginFormEl = document.getElementById('login-form-area');
+  
+  if (now < startMs) {
+    const diff = startMs - now;
+    const h = Math.floor(diff / (1000 * 60 * 60));
+    const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const s = Math.floor((diff % (1000 * 60)) / 1000);
+    
+    statusEl.innerHTML = `<b>Ujian belum dimulai!</b><br>Try Out dibuka Pukul 20.10 WIB dalam:<br><span class="timer-countdown">${h}j ${m}m ${s}d</span>`;
+    loginFormEl.style.display = 'none';
+  } else if (now >= startMs && now <= endMs) {
+    statusEl.innerHTML = `<b>Ujian telah dibuka!</b><br>Batas waktu login hingga pukul 00.10 WIB.`;
+    statusEl.style.background = 'var(--correct-bg)';
+    statusEl.style.borderColor = 'var(--correct-border)';
+    loginFormEl.style.display = 'block';
+  } else {
+    statusEl.innerHTML = `<span class="closed-text">Waktu login ditutup!</span>`;
+    statusEl.style.background = 'var(--wrong-bg)';
+    statusEl.style.borderColor = 'var(--wrong-border)';
+    loginFormEl.style.display = 'none';
+  }
+}
+setInterval(updateAccessStatus, 1000);
+updateAccessStatus();
+
+/* KUNCI JAWABAN REVISI AUDIT TOTAL (100% Sesuai Kaidah) */
+const HURUF = ["A","B","C","D","E"];
 const LVL_LABEL = {mudah:"Mudah", sedang:"Sedang", sulit:"Sulit"};
-// PERUBAHAN: Nama Kategori diperbarui di sini
 const SECTION_LABEL = {masmu:"Istima'", tarakib:"Tarakib", maqru:"Mufrodat"};
 
-/* ---------- TARAKIB TO2 ---------- */
 const TARAKIB = [
-{lvl:"mudah", soal:"السَّيَّارَةُ ...... أَمَامَ الْبَيْتِ", opts:["جَمِيل","جَمِيلَةٌ","جَمِيلَانِ","جُمَلَاء","جَمِيلُونَ"], correct:1},
-{lvl:"mudah", soal:"الطَّبَّاخُ ...... الطَّعَامَ فِي الْمَطْبَخِ", opts:["تَطْبُخُ","يَطْبُخُ","أَطْبُخُ","يَطْبُخَانِ","نَطْبُخُ"], correct:1},
-{lvl:"mudah", soal:"هَذِهِ ...... لَذِيذَةٌ", opts:["خُبْز","لَحْم","تُفَّاحَة","مَاء","عَصِير"], correct:2},
-{lvl:"mudah", soal:"رَجَعَ الْعُمَّالُ ...... الْمَصْنَعِ", opts:["فِي","عَلَى","مِنْ","عَنْ","مَعَ"], correct:2},
-{lvl:"mudah", soal:"الْفَلَّاحَاتُ ...... فِي الْحَقْلِ", opts:["يَعْمَلُ","يَعْمَلْنَ","تَعْمَلُ","يَعْمَلَانِ","أَعْمَلُ"], correct:1},
-{lvl:"mudah", soal:"بَاعَ التَّاجِرُ ...... الْبِضَاعَةَ", opts:["عَلَى","مِنْ","وَ","لَا","(بدون حرف جر)"], correct:4},
-{lvl:"mudah", soal:"هَؤُلَاءِ ...... مَاهِرَاتٌ", opts:["الْمُمَرِّضَة","الْمُمَرِّضَات","الْمُمَرِّض","الْمُمَرِّضَتَانِ","الْمُمَرِّضُون"], correct:1},
-{lvl:"mudah", soal:"لَمْ ...... الْمُهَنْدِسُ الْمَشْرُوعَ", opts:["يُنْجِزُ","يُنْجِزَ","أَنْجَزَ","يُنْجِزَنَّ","مُنْجِز"], correct:1},
-{lvl:"mudah", soal:"مَكْتَبُ ...... وَاسِعٌ", opts:["سَلِيم","سَلِيمٌ","سَلِيمٍ","سَلِيمًا","سَلِيمُونَ"], correct:0},
-{lvl:"mudah", soal:"الْمِفْتَاحَانِ ...... فِي الدُّرْجِ", opts:["مَفْقُودٌ","مَفْقُودَانِ","مَفْقُودَة","مَفَاقِيد","مَفْقُودَتَانِ"], correct:1},
-{lvl:"mudah", soal:"نَحْنُ ...... إِلَى الْمَسْجِدِ أَمْسِ", opts:["نَذْهَبُ","ذَهَبْنَا","يَذْهَبُ","سَنَذْهَبُ","اذْهَبْ"], correct:1},
-{lvl:"mudah", soal:"...... عُنْوَانُكَ؟", opts:["مَنْ","مَا","أَيْنَ","مَتَى","كَيْفَ"], correct:1},
-{lvl:"mudah", soal:"الْأَوْلَادُ ...... فِي السَّاحَةِ", opts:["يَرْكُضُ","يَرْكُضُونَ","أَرْكُضُ","نَرْكُضُ","يَرْكُضَانِ"], correct:1},
-{lvl:"mudah", soal:"هَذَا ...... رَخِيصٌ", opts:["سَاعَة","حَقِيبَة","مِحْفَظَة","قَمِيص","نَظَّارَة"], correct:3},
-{lvl:"mudah", soal:"الْمُوَظَّفُونَ ...... فِي الشَّرِكَةِ", opts:["يَعْمَلُ","تَعْمَلُ","يَعْمَلُونَ","أَعْمَلُ","يَعْمَلَانِ"], correct:2},
-{lvl:"mudah", soal:"لَا ...... فِي الْمَكْتَبَةِ", opts:["تَأْكُلْ","تَأْكُلَ","أَكَلْتَ","يَأْكُلُ","تَأْكُلُ"], correct:0},
-{lvl:"mudah", soal:"حَقِيبَةُ ...... جَدِيدَةٌ", opts:["الطَّالِبَةِ","الطَّالِبَةُ","الطَّالِبَةَ","طَالِبَات","الطَّالِبَاتُ"], correct:0},
-{lvl:"sedang", soal:"خَرَجَ الْمُوَظَّفُ ...... يَحْمِلُ حَقِيبَتَهُ", opts:["وَهُوَ","وَهِيَ","وَهُمْ","وَأَنْتَ","وَهُنَّ"], correct:0},
-{lvl:"sedang", soal:"إِنَّ الطَّرِيقَ ...... الْيَوْمَ", opts:["مُزْدَحِمٌ","مُزْدَحِمًا","مُزْدَحِمٍ","مُزْدَحِمُونَ","مُزْدَحِمَاتٌ"], correct:1},
-{lvl:"sedang", soal:"كَانَ الْبَحْرُ ...... أَمْسِ", opts:["هَادِئٌ","هَادِئًا","هَادِئٍ","هَادِئُونَ","هَادِئَاتٌ"], correct:1},
-{lvl:"sedang", soal:"سَمِعْتُ ...... فِي الْحَفْلِ", opts:["الْمُغَنِّي","الْمُغَنِّيّ","الْمُغَنِّيَ","الْمُغَنُّونَ","مُغَنُّونَ"], correct:2},
-{lvl:"sedang", soal:"الْمُوَظَّفُ الَّذِي ...... بِجَانِبِ الْبَابِ نَشِيطٌ", opts:["يَجْلِسُ","تَجْلِسُ","يَجْلِسَانِ","يَجْلِسُونَ","أَجْلِسُ"], correct:0},
-{lvl:"sedang", soal:"ذَهَبْتُ إِلَى الْمَطَارِ ...... أُوَدِّعَ صَدِيقِي", opts:["لِ","عَنْ","فِي","مَعَ","عَلَى"], correct:0},
-{lvl:"sedang", soal:"هَذِهِ الْمُمَرِّضَةُ ...... تُعَالِجُ الْمَرْضَى بِرِفْقٍ", opts:["الَّذِي","الَّتِي","الَّذِينَ","اللَّاتِي","اللَّذَانِ"], correct:1},
-{lvl:"sedang", soal:"فِي الْمَلْعَبِ ...... لَاعِبًا", opts:["أَحَدَ عَشَرَ","أَحَدَ عَشَرَة","إِحْدَى عَشَرَة","عَشَرَة","أَحَدُ عَشَرَ"], correct:0},
-{lvl:"sedang", soal:"اشْتَرَيْتُ ...... أَقْلَامٍ مُلَوَّنَةٍ", opts:["سَبْعَ","سَبْعُ","سَبْعٌ","سَبْعًا","سَابِع"], correct:0},
-{lvl:"sedang", soal:"لَيْسَ الطَّرِيقُ ...... الْيَوْمَ", opts:["مُزْدَحِمٌ","مُزْدَحِمًا","مُزْدَحِمٍ","مُزْدَحِمُونَ","زِحَام"], correct:1},
-{lvl:"sedang", soal:"الْمُزَارِعُونَ ...... الْمَحْصُولَ الْأُسْبُوعَ الْمَاضِيَ", opts:["يَحْصُدُونَ","حَصَدُوا","تَحْصُدُ","أَحْصُدُ","يَحْصُدُ"], correct:1},
-{lvl:"sedang", soal:"سَافَرَتِ الْبَعْثَةُ ...... الطَّائِرَةِ", opts:["بِ","عَلَى","فِي","مِنْ","عَنْ"], correct:0},
-{lvl:"sedang", soal:"...... تَعُودُ مِنَ الْعَمَلِ؟ مَسَاءً", opts:["كَيْفَ","مَتَى","أَيْنَ","لِمَاذَا","مَنْ"], correct:1},
-{lvl:"sedang", soal:"الْمَصْنَعُ ...... يَعْمَلُ فِيهِ وَالِدِي كَبِيرٌ", opts:["الَّذِي","الَّتِي","الَّذِينَ","مَنْ","مَا"], correct:0},
-{lvl:"sedang", soal:"حَلَّ الطَّالِبُ الْمَسْأَلَةَ ...... صَحِيحَةً", opts:["حَلًّا","حَالًّا","مَحْلُولًا","حُلُولًا","حَلّ"], correct:0},
-{lvl:"sedang", soal:"اِنْتَظَرَ الرَّاكِبُ الْحَافِلَةَ ...... طَوِيلَةً", opts:["مُدَّةً","مُدَّةٌ","مُدَّةٍ","مُدَد","مُدَّتَيْنِ"], correct:0},
-{lvl:"sedang", soal:"لَنْ ...... الْفَرِيقُ الْمُبَارَاةَ غَدًا", opts:["يُؤَجِّلَ","يُؤَجِّلُوا","أَجَّلَ","يُؤَجَّلُونَ","تُؤَجِّلُ"], correct:1},
-{lvl:"sulit", soal:"لَا ...... فِي الشَّرِكَةِ مُوَظَّفٌ مُهْمِلٌ", opts:["رَجُلَ","مُوَظَّفٌ","رَجُلٍ","مُهْمِلَ","مُهْمِلٍ"], correct:3},
-{lvl:"sulit", soal:"مَا هَذَا ...... عَامِلًا كَسُولًا", opts:["إِنْ","إِلَّا","لَكِنْ","بَلْ","إِذَا"], correct:1},
-{lvl:"sulit", soal:"صَنَعَتِ الْمَصْنَعُ مِئَةَ ...... مِنَ الْأَقْمِشَةِ", opts:["مِتْر","أَمْتَارٍ","مِتْرًا","مِتْرٌ","مِتْرٍ"], correct:2},
-{lvl:"sulit", soal:"مَا ...... رَائِعًا هَذَا الْمَنْظَرُ!", opts:["أَرْوَعَ","أَرْوَعُ","رَائِعٌ","الْأَرْوَعُ","رَائِعًا"], correct:0},
-{lvl:"sulit", soal:"كُرِّمَ الْمُوَظَّفُ ...... إِخْلَاصِهِ", opts:["عَلَى","فِي","مِنْ","عَنْ","إِلَى"], correct:0},
-{lvl:"sulit", soal:"لَوْ ...... الْفَرِيقُ لَفَازَ", opts:["يَجْتَهِدُ","اجْتَهَدَ","يَجْتَهِدَ","اجْتَهَدَنَّ","مُجْتَهِد"], correct:1},
-{lvl:"sulit", soal:"إِنَّمَا ...... الْمَشَارِيعُ بِالتَّخْطِيطِ", opts:["تَنْجَحُ","نَجَحَتْ","نَجَاح","النَّجَاح","نَجَحَ"], correct:0},
-{lvl:"sulit", soal:"سُئِلَ الْمُوَظَّفُ عَنْ سَبَبِ تَأَخُّرِهِ ...... أَجَابَ بِصِدْقٍ", opts:["فَ","ثُمَّ","أَوْ","لَكِنْ","بَلْ"], correct:0},
-{lvl:"sulit", soal:"يُعَدُّ هَذَا الْمَشْرُوعُ ...... الْمَشَارِيعِ رِبْحًا", opts:["أَكْثَرَ","أَكْثَرُ","كَثِيرٌ","الْكَثِير","كَثِيرًا"], correct:0},
-{lvl:"sulit", soal:"حَضَرَ الْعُمَّالُ جَمِيعًا ...... وَاحِدٍ مِنْهُمْ", opts:["غَيْرُ","غَيْرَ","غَيْرِ","سِوَى","إِلَّا"], correct:1},
-{lvl:"sulit", soal:"بِعْتُ الْبَيْتَ ...... مُرْتَفِعٍ", opts:["بِثَمَنٍ","بِثَمَنٌ","ثَمَنًا","الثَّمَنُ","ثَمَنٍ"], correct:0},
-{lvl:"sulit", soal:"...... يَجْتَهِدِ الْعَامِلُ يَنْجَحْ فِي عَمَلِهِ", opts:["مَنْ","مَا","أَيّ","كُلَّمَا","إِنَّ"], correct:0},
-{lvl:"sulit", soal:"تَبَرَّعَ التَّاجِرُ بِمَالِهِ ...... رَغْبَةً فِي الثَّوَابِ", opts:["حُبًّا وَ","حُبٌّ وَ","حُبٍّ وَ","الْحُبّ","مَحَبَّةً"], correct:0},
-{lvl:"sulit", soal:"كُلَّمَا ...... الْعَامِلُ ازْدَادَ إِنْتَاجُهُ", opts:["اجْتَهَدَ","يَجْتَهِدُ","اجْتَهَدَنَّ","مُجْتَهِد","يَجْتَهِدَ"], correct:0},
-{lvl:"sulit", soal:"لَمَّا ...... الْمُدِيرُ دَخَلَ الْمُوَظَّفُونَ", opts:["حَضَرَ","يَحْضُرُ","حَاضِر","يَحْضُرَ","حُضُور"], correct:0},
-{lvl:"sulit", soal:"بَعْدَ أَنْ ...... الْعَامِلُ عَمَلَهُ عَادَ إِلَى بَيْتِهِ", opts:["يُنْهِيَ","أَنْهَى","يُنْهِي","مُنْهٍ","إِنْهَاء"], correct:1},
+{lvl:"mudah", soal:"الْكِتَابُ ...... عَلَى الْمَكْتَبِ", opts:["جَمِيلَةٌ","جَمِيلٌ","جَمِيلَانِ","جَمِيلُونَ","جَمِيلَاتٌ"], correct:1},
+{lvl:"mudah", soal:"الْمُدَرِّسُ ...... الدَّرْسَ فِي الْفَصْلِ", opts:["تَشْرَحُ","يَشْرَحُ","أَشْرَحُ","يَشْرَحَانِ","نَشْرَحُ"], correct:1},
+{lvl:"mudah", soal:"هَذِهِ ...... جَمِيلَةٌ", opts:["كِتَابٌ","بَيْتٌ","قَلَمٌ","سَيَّارَةٌ","كُرْسِيٌّ"], correct:3},
+{lvl:"mudah", soal:"ذَهَبَ الطَّالِبُ ...... الْمَدْرَسَةِ", opts:["فِي","عَلَى","إِلَى","عَنْ","مَعَ"], correct:2},
+{lvl:"mudah", soal:"الطَّالِبَاتُ ...... فِي الْفَصْلِ", opts:["يَجْلِسُ","يَجْلِسْنَ","تَجْلِسُ","يَجْلِسَانِ","أَجْلِسُ"], correct:1},
+{lvl:"mudah", soal:"قَرَأَ عُمَرُ ...... الْكِتَابَ", opts:["عَلَى","مِنْ","وَ","لَا","(بدون حرف جر)"], correct:4},
+{lvl:"mudah", soal:"هَؤُلَاءِ ...... مُجْتَهِدُونَ", opts:["الطَّالِبُ","الطُّلَّابُ","الطَّالِبَةُ","الطَّالِبَتَانِ","الطَّالِبَانِ"], correct:1},
+{lvl:"mudah", soal:"لَمْ ...... المُهَنْدِسُ المَشْرُوْعَ", opts:["يُنْجِزُ","يُنْجِزْ","أَنْجَزَ","يُنْجِزَنَّ","مُنْجِزٌ"], correct:1},
+{lvl:"mudah", soal:"مَكْتَبُ ...... وَاسِعٌ", opts:["سَلِيْمٍ","سَلِيْمُ","سَلِيْمِ","سَلِيْمًا","سَلِيْمُوْنَ"], correct:0},
+{lvl:"mudah", soal:"الْقَلَمَانِ ...... عَلَى الطَّاوِلَةِ", opts:["جَدِيدٌ","جَدِيدَانِ","جَدِيدَةٌ","جُدُدٌ","جَدِيدَتَانِ"], correct:1},
+{lvl:"mudah", soal:"أَنَا ...... إِلَى السُّوقِ أَمْسِ", opts:["أَذْهَبُ","ذَهَبْتُ","يَذْهَبُ","سَأَذْهَبُ","اذْهَبْ"], correct:1},
+{lvl:"mudah", soal:"...... اسْمُكَ؟", opts:["مَنْ","مَا","أَيْنَ","مَتَى","كَيْفَ"], correct:1},
+{lvl:"mudah", soal:"الْبِنْتُ ...... فِي الْحَدِيقَةِ", opts:["يَلْعَبُ","تَلْعَبُ","أَلْعَبُ","نَلْعَبُ","تَلْعَبَانِ"], correct:1},
+{lvl:"mudah", soal:"هَذَا ...... جَمِيلٌ", opts:["مَدِينَةٌ","سَيَّارَةٌ","حَدِيقَةٌ","بَيْتٌ","شَجَرَةٌ"], correct:3},
+{lvl:"mudah", soal:"الْمُعَلِّمُونَ ...... فِي الْمَدْرَسَةِ", opts:["يَعْمَلُ","تَعْمَلُ","يَعْمَلُونَ","أَعْمَلُ","يَعْمَلَانِ"], correct:2},
+{lvl:"mudah", soal:"لَا ...... فِي الْفَصْلِ", opts:["تَتَكَلَّمْ","تَتَكَلَّمَ","تَكَلَّمْتَ","يَتَكَلَّمُ","تَتَكَلَّمُ"], correct:0},
+{lvl:"mudah", soal:"كِتَابُ ...... عَلَى الطَّاوِلَةِ", opts:["الطَّالِبَةِ","الطَّالِبَةُ","الطَّالِبَةَ","طَالِبَاتٌ","الطَّالِبَاتُ"], correct:0},
+{lvl:"sedang", soal:"جَاءَ الطَّالِبُ ...... يَحْمِلُ كُتُبَهُ", opts:["وَهُوَ","وَهِيَ","وَهُمْ","وَأَنْتَ","وَهُنَّ"], correct:0},
+{lvl:"sedang", soal:"إِنَّ الطَّرِيْقَ ...... اليَوْمَ", opts:["مُزْدَحِمٍ","مُزْدَحِمٌ","مُزْدَحِمَ","مُزْدَحِمُوْنَ","مُزْدَحِمَاتٌ"], correct:1},
+{lvl:"sedang", soal:"كَانَ الْجَوُّ ...... أَمْسِ", opts:["بَارِدٌ","بَارِدًا","بَارِدٍ","بَارِدُونَ","بَارِدَاتٌ"], correct:1},
+{lvl:"sedang", soal:"رَأَيْتُ ...... فِي الْحَدِيقَةِ", opts:["الطِّفْلُ","الطِّفْلِ","الطِّفْلَ","الطِّفْلُونَ","أَطْفَالٌ"], correct:2},
+{lvl:"sedang", soal:"الطَّالِبُ الَّذِي ...... بِجَانِبِي مُجْتَهِدٌ", opts:["يَجْلِسُ","تَجْلِسُ","يَجْلِسَانِ","يَجْلِسُونَ","أَجْلِسُ"], correct:0},
+{lvl:"sedang", soal:"ذَهَبْتُ إِلَى السُّوقِ ...... أَشْتَرِيَ الْخُبْزَ", opts:["لِ","عَنْ","فِي","مَعَ","عَلَى"], correct:0},
+{lvl:"sedang", soal:"هَذِهِ الْبِنْتُ ...... خَطُّهَا جَمِيلٌ", opts:["الَّذِي","الَّتِي","الَّذِينَ","اللَّاتِي","اللَّذَانِ"], correct:1},
+{lvl:"sedang", soal:"فِي الْفَصْلِ ...... طَالِبًا", opts:["عِشْرُونَ","عِشْرِينَ","عِشْرُونٌ","عِشْرِينَا","عَشَرَةُ"], correct:0},
+{lvl:"sedang", soal:"اشْتَرَيْتُ خَمْسَةَ ...... ", opts:["أَقْلَامٍ","قَلَمًا","أَقْلَامًا","قَلَمٍ","قَلَمٌ"], correct:0},
+{lvl:"sedang", soal:"لَيْسَ الطَّقْسُ ...... الْيَوْمَ", opts:["بَارِدٌ","بَارِدًا","بَارِدٍ","بَارِدُونَ","بَرْدٌ"], correct:1},
+{lvl:"sedang", soal:"لَنْ ...... الفَرِيْقُ المُبَارَاةَ غَدًا", opts:["يُؤَجِّلَ","يُؤَجِّلُوْا","أَجَّلَ","يُؤَجِّلُوْنَ","تُؤَجِّلَ"], correct:0},
+{lvl:"sedang", soal:"صَنَعَتِ المَصْنَعُ مِئَةَ ...... مِنَ الأَقْمِشَةِ", opts:["مِتْرْ","أَمْتَارٍ","مِتْرًا","مِتْرٌ","مِتْرٍ"], correct:4},
+{lvl:"sedang", soal:"...... تَذْهَبُ إِلَى الْمَدْرَسَةِ؟ صَبَاحًا", opts:["كَيْفَ","مَتَى","أَيْنَ","لِمَاذَا","مَنْ"], correct:1},
+{lvl:"sedang", soal:"الْبَيْتُ ...... حَدِيقَتُهُ جَمِيلَةٌ قَرِيبٌ مِنَّا", opts:["الَّذِي","الَّتِي","الَّذِينَ","مَنْ","مَا"], correct:0},
+{lvl:"sedang", soal:"كَتَبَ الطَّالِبُ الدَّرْسَ ...... جَمِيلًا", opts:["كِتَابَةً","كَاتِبًا","مَكْتُوبًا","كُتُبًا","كِتَابٌ"], correct:0},
+{lvl:"sedang", soal:"جَلَسَ الْوَلَدُ ...... أَمَامَ التِّلْفَازِ", opts:["سَاعَةً","سَاعَةٌ","سَاعَةٍ","سَاعَاتٍ","سَاعَتَيْنِ"], correct:0},
+{lvl:"sedang", soal:"لَنْ ...... الطَّالِبُ الِامْتِحَانَ غَدًا", opts:["يُؤَجِّلَ","يُؤَجِّلُوا","أَجَّلَ","يُؤَجَّلُونَ","تُؤَجِّلُ"], correct:0},
+{lvl:"sulit", soal:"لَا ...... مَحْبُوبٌ", opts:["مُنَافِقَ","مُنَافِقٌ","مُنَافِقٍ","مُنَافِقُ","مُنَافِقًا"], correct:0},
+{lvl:"sulit", soal:"مَا كَانَ مُحَمَّدٌ ...... رَسُولًا", opts:["إِلَّا","غَيْرَ","سِوَى","أَوْ","وَ"], correct:0},
+{lvl:"sulit", soal:"تَصَدَّقَ الرَّجُلُ بِمَالِهِ ...... فِي الثَّوَابِ", opts:["رَغْبَةً","رَغْبَةٌ","رَغْبَةٍ","رَاغِبًا","الرَّغْبَةُ"], correct:0},
+{lvl:"sulit", soal:"مَا ...... هَذِهِ الْحَدِيقَةَ!", opts:["أَجْمَلَ","أَجْمَلُ","أَجْمَلِ","جَمِيلَةٌ","جَمَالُ"], correct:0},
+{lvl:"sulit", soal:"كُوفِئَ الطَّالِبُ ...... اجْتِهَادِهِ", opts:["عَلَى","فِي","مِنْ","عَنْ","إِلَى"], correct:0},
+{lvl:"sulit", soal:"لَوْ ...... الطَّالِبُ لَنَجَحَ", opts:["يَجْتَهِدُ","اجْتَهَدَ","يَجْتَهِدَ","اجْتَهَدَنَّ","مُجْتَهِدٌ"], correct:1},
+{lvl:"sulit", soal:"إِنَّمَا الْمُؤْمِنُونَ ...... ", opts:["إِخْوَةٌ","إِخْوَةً","إِخْوَةٍ","أَخًا","أَخٌ"], correct:0},
+{lvl:"sulit", soal:"سُئِلَ الطَّالِبُ عَنْ سَبَبِ غِيَابِهِ ...... أَجَابَ بِصِدْقٍ", opts:["فَ","ثُمَّ","أَوْ","لَكِنْ","بَلْ"], correct:0},
+{lvl:"sulit", soal:"يُعَدُّ هَذَا الْكِتَابُ ...... الْكُتُبِ فَائِدَةً", opts:["أَكْثَرَ","أَكْثَرُ","كَثِيرٌ","الْكَثِيرِ","كَثِيرًا"], correct:0},
+{lvl:"sulit", soal:"حَضَرَ الطُّلَّابُ جَمِيعًا غَيْرَ ...... مِنْهُمْ", opts:["وَاحِدٍ","وَاحِدٌ","وَاحِدًا","وَاحِدُ","الْوَاحِدَ"], correct:0},
+{lvl:"sulit", soal:"بِعْتُ السَّيَّارَةَ ...... رَخِيصٍ", opts:["بِثَمَنٍ","بِثَمَنٌ","ثَمَنًا","الثَّمَنُ","الثَّمَنِ"], correct:0},
+{lvl:"sulit", soal:"...... يَحْضُرِ الطَّالِبُ الدَّرْسَ يَفْهَمْهُ", opts:["مَنْ","مَا","أَيّ","كُلَّمَا","إِنَّ"], correct:0},
+{lvl:"sulit", soal:"كُلَّمَا ...... الطَّالِبُ ازْدَادَ عِلْمُهُ", opts:["اجْتَهَدَ","يَجْتَهِدُ","يَجْتَهِدْ","مُجْتَهِدٌ","يَجْتَهِدَ"], correct:0},
+{lvl:"sulit", soal:"لَمَّا ...... الْمُعَلِّمُ دَخَلَ الطُّلَّابُ", opts:["حَضَرَ","يَحْضُرُ","حَاضِرٌ","يَحْضُرَ","حُضُورٌ"], correct:0},
+{lvl:"sulit", soal:"بَعْدَ أَنْ ...... الطَّالِبُ وَاجِبَهُ خَرَجَ لِلَّعِبِ", opts:["أَنْهَى","يُنْهِيُ","مُنْهٍ","إِنْهَاءٌ","يُنْهِيْ"], correct:0},
+{lvl:"sulit", soal:"لَمْ ...... عَلِيٌّ إِلَى الْمَدْرَسَةِ أَمْسِ", opts:["يَذْهَبْ","يَذْهَبُ","يَذْهَبَ","ذَهَبَ","ذَاهِبٌ"], correct:0},
 ];
 
-/* ---------- MAQRU' TO2 ---------- */
 const MAQRU = [
-{lvl:"mudah", soal:"وَجْبَةٌ تُؤْكَلُ فِي وَسَطِ النَّهَارِ", opts:["عَشَاء","فُطُور","رَفِيق","غَدَاء","مَدْرَسَة","زَمِيل"], correct:3},
-{lvl:"mudah", soal:"مِنَ الرِّيَاضَاتِ الْبَدَنِيَّةِ، بِالْغَوْصِ أَوِ الْعَوْمِ فِي الْمَاءِ", opts:["جَرْي","قَفْز","سِمَاع","سِبَاحَة","رَقْص"], correct:3},
-{lvl:"mudah", soal:"التَّرْتِيبُ وَالِاتِّسَاقُ", opts:["سِيَاحَة","حُرِّيَّة","نِظَام","صَحْرَاء","فِضَّة","قَبْلَ"], correct:2},
-{lvl:"mudah", soal:"يَأْتِي فِي مَرْحَلَةِ الشَّبَابِ", opts:["غُلَام","شَيْخ","عَجُوز","طِفْل","رَجُل","زَمِيل"], correct:0},
-{lvl:"mudah", soal:"اسْتِرْجَاعٌ لِلْأَحْدَاثِ وَالْمَوَاقِفِ السَّابِقَةِ", opts:["نَظَر","نَسِيَ","نَفْس","نَفَعَ","نَادَى","ذَاكِرَة"], correct:5},
-{lvl:"mudah", soal:"الرُّوحُ، أَوِ الشَّخْصُ وَالْإِنْسَانُ بِجُمْلَتِهِ", opts:["نَظَر","نَادَى","شِعْر","نَفْس","تَعِبَ","مَاء"], correct:3},
-{lvl:"mudah", soal:"حَرْفُ نَفْيٍ وَنَصْبٍ", opts:["لَنْ","لَمْ","لَا","لَمَّا","لَيْسَ"], correct:0},
-{lvl:"mudah", soal:"الْقَسَمُ وَالْحَلِفُ عَلَى شَيْءٍ لِإِثْبَاتِ صِحَّتِهِ", opts:["صِدْق","كَذِب","يَمِين","صِفْر","عَدْل"], correct:2},
-{lvl:"mudah", soal:"نَوْعٌ مِنَ الطَّعَامِ السَّائِلِ كَالْمَرَقِ وَنَحْوِهِ", opts:["صَيْف","حَسَاء","مَاء","عَصِير","جَبَل","لَمَسَ"], correct:1},
-{lvl:"mudah", soal:"عَكْسُ الْمَوْتِ، وَهُوَ اسْتِمْرَارُ الْبَقَاءِ", opts:["صَيْف","تَعِبَ","حَزِنَ","حَيَاة","مَوْت"], correct:3},
-{lvl:"mudah", soal:"الصَّغِيرُ الَّذِي فَقَدَ أَبَاهُ", opts:["جَدّ","شَقِيق","غُلَام","يَتِيم","طِفْل"], correct:3},
-{lvl:"mudah", soal:"دَاوَى وَصَلَحَ", opts:["فُسْتَان","سَمَاء","صِحَّة","عَالَجَ","مَاء"], correct:3},
-{lvl:"mudah", soal:"ثَوْبٌ مِنْ مَلَابِسِ النِّسَاءِ مُخْتَلِفُ الْأَلْوَانِ", opts:["ضَابِط","شَهِيد","حِزَام","فُسْتَان","ثَوْب"], correct:3},
-{lvl:"mudah", soal:"ظَهَرَ الشَّيْءُ وَأَصْبَحَ ظَاهِرًا لِلْآخَرِينَ", opts:["تَعَرَّفَ","تَعَبَ","عَصِير","تَبَيَّنَ","شَكّ"], correct:3},
-{lvl:"mudah", soal:"التَّوَجُّعُ مِنَ الْأَلَمِ وَنَحْوِهِ", opts:["عَصِير","شَكْوَى","رَبِيع","صَيْف","شَكّ","شَكَا"], correct:5},
-{lvl:"mudah", soal:"إِنَاءٌ يَغْلِي", opts:["ثَوْب","قِدْر","شُعُور","صَدْر","عَصِير"], correct:1},
-{lvl:"mudah", soal:"عَمَلِيَّةُ تَحْدِيدِ كَمِّيَّةٍ أَوْ حَجْمٍ أَوْ دَرَجَةِ شَيْءٍ مُعَيَّنٍ بِاسْتِخْدَامِ أَدَوَاتٍ", opts:["سَفَر","عَمَل","حَجْم","مِيزَان","قِيَاس","رَأْس"], correct:4},
-{lvl:"sedang", soal:"جَلْبُ الْبَضَائِعِ مِنْ دَوْلَةٍ إِلَى دَوْلَةٍ", opts:["عَدْل","بَيْع","شِرَاء","سَفَر","اِسْتِيرَاد","مَاء"], correct:4},
-{lvl:"sedang", soal:"الْقِصَّةُ الْمَطْوِيَّةُ", opts:["رَجُل","سِيرَة","حَدِيث","حَيَاة","لُغَة"], correct:1},
-{lvl:"sedang", soal:"بَدَلًا مِنَ الشَّيْءِ", opts:["حِسَاب","تَعْوِيض","فَرْحَة","عَدْل","ثَمَن"], correct:1},
-{lvl:"sedang", soal:"كَثِيرُ الْكَلَامِ", opts:["سَرِيع","غَرِيب","ثَرْثَار","قَرِيب","طِفْل"], correct:2},
-{lvl:"sedang", soal:"قُوَّاتٌ عَسْكَرِيَّةٌ مُنَظَّمَةٌ", opts:["رِجَال","شُرْطَة","جَيْش","دَوْلَة","قَادَة"], correct:2},
-{lvl:"sedang", soal:"فَاجِعَةٌ أَوْ مُصِيبَةٌ", opts:["سَفَر","مَوْت","هَاتِف","كَارِثَة","قِطَار","عَصِير"], correct:3},
-{lvl:"sedang", soal:"مَبْعُوثٌ يُمَثِّلُ الدَّوْلَةَ لَدَى رَئِيسِ الدَّوْلَةِ الْمَبْعُوثِ إِلَيْهَا", opts:["شَيْخ","رَئِيس","حَاكِم","سَفِير","رَجُل","حَجّ"], correct:3},
-{lvl:"sedang", soal:"إِعْطَاءُ رَأْيٍ أَوْ مَشُورَةٍ لِلشَّخْصِ لِمُسَاعَدَتِهِ", opts:["حَلّ","سَمَاء","مَاء","نَصِيحَة","قَلَم"], correct:3},
-{lvl:"sedang", soal:"مَجْمُوعَةُ الْقَوَاعِدِ الْأَسَاسِيَّةِ الَّتِي تُمَثِّلُ نِظَامَ الدَّوْلَةِ", opts:["حَقّ","سِجِلّ","شَعْب","سُلْطَة","دُسْتُور","رِعَايَة"], correct:4},
-{lvl:"sedang", soal:"تَقْدِيمُ الْعَوْنِ اللَّازِمِ لِلْأَشْخَاصِ الْمُحْتَاجِينَ لِلْمُسَاعَدَةِ", opts:["وِقَايَة","سَلَامَة","صِحَّة","إِغَاثَة","عَمَل"], correct:3},
-{lvl:"sedang", soal:"الْحَالَةُ الَّتِي يَشْعُرُ فِيهَا الْإِنْسَانُ بِعَدَمِ الْحَاجَةِ لِتَنَاوُلِ الطَّعَامِ بِسَبَبِ امْتِلَاءِ مَعِدَتِهِ مِنَ الْأَكْلِ", opts:["وَجْبَة","سُكَّر","شِبَع","جُوع","صِحَّة","شُرْب"], correct:2},
-{lvl:"sedang", soal:"الِالْتِزَامُ بِقَوَاعِدَ مُعَيَّنَةٍ وَمَوَاعِيدَ مُحَدَّدَةٍ", opts:["فَرَس","اِنْضِبَاط","تَعَمُّد","عَمَل","هَوَاء","فَرَس"], correct:1},
-{lvl:"sedang", soal:"لَوْنٌ رَمَادِيٌّ", opts:["شِتَاء","خَضْرَاء","أَزْرَق","رَمَادِيّ","فِضَّة","فَرَس"], correct:3},
-{lvl:"sedang", soal:"رِيحٌ شَدِيدَةٌ يَصْحَبُهَا عَادَةً مَطَرٌ غَزِيرٌ أَوْ ثَلْجٌ أَوْ بَرْدٌ", opts:["فَصْل","مَطَر","طَقْس","عَاصِفَة","فَرَس","شِتَاء"], correct:3},
-{lvl:"sedang", soal:"شُعُورٌ بِالْمُتْعَةِ وَالسُّرُورِ وَالسَّعَادَةِ، تَقَالُ عَادَةً عَنِ طَعْمِ الطَّعَامِ", opts:["صَيْف","مَاء","لَذِيذ","سَفَر","طِفْل","طَرَف"], correct:2},
-{lvl:"sedang", soal:"اِنْقَادَ، وَهُوَ دَلِيلُ الِانْحِنَاءِ", opts:["سَافَرَ","قَامَ","خَضَعَ","ذَهَبَ","جَلَسَ","صَيْف"], correct:2},
-{lvl:"sedang", soal:"مُحْتَرِفُ الصَّيْدِ", opts:["صَائِب","صَيَّاد","سَمَكَة","طَائِر","بَحْر"], correct:1},
-{lvl:"sedang", soal:"مَجْمُوعَةٌ مِنَ الْأَبْيَاتِ الشِّعْرِيَّةِ", opts:["شِعْر","قَصِيدَة","كَلَام","رَسَائِل","وَرَق","صَدِيق"], correct:1},
-{lvl:"sulit", soal:"غَاصَ فِي الْمَاءِ لِغَايَاتٍ مُخْتَلِفَةٍ", opts:["سَافَرَ","غَرِقَ","سَبَحَ","غَاصَ","جَلَسَ"], correct:3},
-{lvl:"sulit", soal:"مُلْتَقَى الشَّيْءِ عَلَى غَيْرِ أَصْلٍ سَابِقٍ", opts:["اِبْتِدَاء","اِبْتِكَار","ثَمَن","عَمَل","جَدِيد"], correct:1},
-{lvl:"sulit", soal:"حَيَوَانٌ يَأْكُلُ اللُّحُومَ، مَعْرُوفٌ بِخِدَاعِهِ وَحِيلَتِهِ", opts:["أَسَد","جَمَل","ثَعْلَب","تِمْسَاح","طَائِر"], correct:2},
-{lvl:"sulit", soal:"مِهْنَةُ جَمْعِ الْأَخْبَارِ وَالْآرَاءِ", opts:["كِتَابَة","صِحَافَة","عَمَل","رَسَائِل","طِفْل"], correct:1},
-{lvl:"sulit", soal:"أَلْغَى وَأَوْقَفَ الشَّيْءَ", opts:["مَحَا","أَبْطَلَ","مَنَعَ","عَدَّلَ","قَبْلَ"], correct:1},
-{lvl:"sulit", soal:"مَتَاعُ الْبَيْتِ وَالْمَكْتَبِ وَنَحْوِهِمَا مِنْ فِرَاشٍ وَغَيْرِهِ", opts:["دَار","بَيْت","بِيتَة","أَقْمِشَة","أَثَاث"], correct:4},
-{lvl:"sulit", soal:"صِدْقٌ وَإِخْلَاصٌ وَثَبَاتٌ عَلَى الْعَهْدِ", opts:["بَيْع","حُبّ","عَمَل","صَدَاقَة","وَفَاء"], correct:4},
-{lvl:"sulit", soal:"مَجْمُوعَةٌ مِنَ الْعَنَاصِرِ الطَّبِيعِيَّةِ وَالِاصْطِنَاعِيَّةِ الَّتِي تُحِيطُ بِالْإِنْسَانِ وَالنَّبَاتِ وَالْحَيَوَانِ", opts:["أَرْض","بَحْر","بِيئَة","سَمَاء","جَبَل"], correct:2},
-{lvl:"sulit", soal:"الْجَمَاعَةُ مِنَ النَّاسِ تَجْمَعُهُمْ صِلَةُ قُرْبَى", opts:["شَعْب","أَقَارِب","قَوْم","جِيرَان","زَمِيل"], correct:1},
-{lvl:"sulit", soal:"عَامَّةُ النَّاسِ الَّذِينَ عَلَيْهِمْ وَالٍ يَرْعَى مَصَالِحَهُمْ وَأُمُورَهُمْ", opts:["قَرْيَة","هَوَاء","شَعْب","رَعِيَّة","أُمَّة"], correct:3},
-{lvl:"sulit", soal:"مَا يَعْتَرِي الْإِنْسَانَ مِنْ حَالَةٍ نَاشِئَةٍ عَنْ حُدُوثِ أَمْرٍ غَيْرِ مُتَوَقَّعٍ وَمُفَاجِئٍ", opts:["دَهْشَة","تَعَب","فَرَح","صِحَّة","خَوْف"], correct:0},
-{lvl:"sulit", soal:"حَالَةُ الْفَشَلِ فِي تَحْقِيقِ هَدَفٍ مَا", opts:["سَمَاء","خَيْبَة","تَعَب","فَرَح","فَرَج"], correct:1},
-{lvl:"sulit", soal:"الصِّيتُ، مَا يُسْمَعُ وَيَنْتَشِرُ عَنِ الشَّخْصِ مِنْ ذِكْرٍ حَسَنٍ أَوْ سَيِّئٍ", opts:["قُرْب","سُمْعَة","عَرِيف","خِدْمَة","صِفْر"], correct:1},
-{lvl:"sulit", soal:"عُمْلَةٌ نَقْدِيَّةٌ", opts:["فِضَّة","ذَهَب","عَمَل","ثَمَن","دِينَار"], correct:4},
-{lvl:"sulit", soal:"مَبَادِئُ مُعْتَمَدَةٌ لِأَخْذِ الْإِجْرَاءَاتِ بِنَاءً عَلَيْهَا", opts:["سِيَاسَة","مَاء","عَمَل","حَرَكَة","مَعَايِير"], correct:4},
+{lvl:"mudah", soal:"مَادَّةٌ حُلْوَةٌ تُسْتَخْرَجُ غَالِبًا مِنْ عَصِيرِ الْقَصَبِ", opts:["حَرِير","قِطْر","مُرَبَّى","خَشَب","سُكَّر"], correct:4},
+{lvl:"mudah", soal:"غَادَرَ الْمَكَانَ", opts:["جَلَسَ","رَحَلَ","أَقَامَ","وَصَلَ","رَقَدَ"], correct:1},
+{lvl:"mudah", soal:"نِظَامٌ يَخْتَصُّ بِنَقْلِ الرَّسَائِلِ", opts:["سِتَار","قِطَار","بَرِيد","هَاتِف","حَاسُوب"], correct:2},
+{lvl:"mudah", soal:"فَنُّ تَأْلِيفِ الْأَلْحَانِ", opts:["رَسْم","شِعْر","مُوسِيقَى","رَقْص","تَمْثِيل"], correct:2},
+{lvl:"mudah", soal:"عَكْسُ كَلِمَةِ (خَرَجَ)", opts:["ذَهَبَ","دَخَلَ","قَامَ","سَافَرَ","قَعَدَ"], correct:1},
+{lvl:"mudah", soal:"مَدِينَةٌ يُدَارُ حُكْمُ الْبِلَادِ مِنْهَا", opts:["قَرْيَة","مِينَاء","حَيّ","عَاصِمَة","شَارِع"], correct:3},
+{lvl:"mudah", soal:"أَنْ يُخْبِرَ بِمَا رَأَى", opts:["كَذَبَ","نَسِيَ","أَنْكَرَ","شَهِدَ","تَذَكَّرَ"], correct:3},
+{lvl:"mudah", soal:"الْإِحْسَانُ وَالْمَعْرُوفُ ابْتِدَاءً", opts:["قَرْض","جَزَاء","عُقُوبَة","فَضْل","هَدِيَّة"], correct:3},
+{lvl:"mudah", soal:"أَبُو الْأَبِ، وَأَبُو الْأُمِّ", opts:["عَمّ","خَال","جَدّ","حَفِيد","أَخ"], correct:2},
+{lvl:"mudah", soal:"شُعُورٌ بِالِاضْطِرَابِ بِسَبَبِ مَكْرُوهٍ", opts:["فَرَح","غَضَب","شَوْق","خَوْف","حُزْن"], correct:3},
+{lvl:"mudah", soal:"صَحَا مِنَ النَّوْمِ", opts:["نَامَ","رَقَدَ","تَعِبَ","اسْتَيْقَظَ","غَفَا"], correct:3},
+{lvl:"mudah", soal:"الْفَضَاءُ الْأَزْرَقُ فَوْقَ رُؤُوسِنَا", opts:["أَرْض","بَحْر","سَمَاء","جَبَل","وَادٍ"], correct:2},
+{lvl:"mudah", soal:"مَادَّةٌ لَهَا خَاصِّيَّةٌ عِلَاجِيَّةٌ", opts:["غِذَاء","سُمّ","مَاء","دَوَاء","عَصِير"], correct:3},
+{lvl:"mudah", soal:"مَكَانٌ لِتَلَقِّي الْعِلْمِ وَالدِّرَاسَةِ", opts:["مُسْتَشْفَى","مَدْرَسَة","مَصْنَع","مَطْعَم","مَلْعَب"], correct:1},
+{lvl:"mudah", soal:"قِيمَةُ الشَّيْءِ وَسِعْرُهُ", opts:["ثَمَن","جِهَاز","سَفَر","فَرَح","مَاء"], correct:0},
+{lvl:"mudah", soal:"الْفَصْلُ الَّذِي يَشْتَدُّ فِيهِ الْبَرْدُ", opts:["شِتَاء","خَضْرَاء","ذَهَبَ","رَبِيع","فِضَّة"], correct:0},
+{lvl:"mudah", soal:"نَافِذَةٌ تُصْنَعُ مِنَ الزُّجَاجِ أَوِ الْخَشَبِ", opts:["شِتَاء","خَضْرَاء","فِضَّة","شُبَّاك","مَلِك"], correct:3},
+{lvl:"sedang", soal:"ثَرِيٌّ، كَثِيرُ الْمَالِ", opts:["فِضَّة","خَضْرَاء","عَصِير","شِتَاء","غَنِيّ"], correct:4},
+{lvl:"sedang", soal:"كَلَامٌ وَأَصْوَاتٌ يَسْتَخْدِمُهَا النَّاسُ", opts:["تَعَلَّمَ","تَرْجَمَة","حَيَاة","لُغَة","عَلَى"], correct:3},
+{lvl:"sedang", soal:"حَيَوَانٌ يُسَمَّى مَلِكَ الْغَابَةِ", opts:["لَمَسَ","شَمْس","أَسَد","عَدْل","مَدِينَة"], correct:2},
+{lvl:"sedang", soal:"حَيَوَانٌ ضَخْمٌ لَهُ خُرْطُومٌ طَوِيلٌ", opts:["جَمَل","أَسَد","فِيل","تِمْسَاح","ثَعْلَب"], correct:2},
+{lvl:"sedang", soal:"حَيَوَانٌ مَعْرُوفٌ بِذَكَائِهِ وَتَقْلِيدِهِ لِلْإِنْسَانِ", opts:["دُبّ","قِرْد","ثَعْلَب","أَرْنَب","فِيل"], correct:1},
+{lvl:"sedang", soal:"حَيَوَانٌ ذُو فَرْوٍ كَثِيفٍ يَعِيشُ فِي الْبَرْدِ", opts:["أَسَد","ذِئْب","فِيل","دُبّ","قِرْد"], correct:3},
+{lvl:"sedang", soal:"حَيَوَانٌ مَائِيٌّ يَتَنَفَّسُ بِالْخَيَاشِيمِ", opts:["شَجَرَة","سَمَكَة","رَأْس","مَلِك","صُنْدُوق"], correct:1},
+{lvl:"sedang", soal:"وَرَقَةٌ صَغِيرَةٌ يُكْتَبُ عَلَيْهَا مَعْلُومَاتٌ", opts:["رَجُل","رَئِيس","صَدَاقَة","رِيَاضِيّ","بِطَاقَة"], correct:4},
+{lvl:"sedang", soal:"لَقَبٌ لِمَنْصِبِ الْقِيَادَةِ بِشَرِكَةٍ", opts:["هُنَا","رَئِيس","رِيَاضِيّ","رَجُل","زَمِيل"], correct:1},
+{lvl:"sedang", soal:"مَكَانٌ لِبَيْعِ الْأَدْوِيَةِ", opts:["مَخْبَز","صَيْدَلِيَّة","بَقَّالَة","مَكْتَبَة","مُسْتَشْفَى"], correct:1},
+{lvl:"sedang", soal:"مَنْ لَمْ يَصِلْ إِلَى سِنِّ الْبُلُوغِ", opts:["زَمِيل","سَفَر","ذَكَر","رَجُل","طِفْل"], correct:4},
+{lvl:"sedang", soal:"مَكَانُ إِقَامَةِ الْإِنْسَانِ وَوَطَنُهُ", opts:["عَلَى","بَحْر","جَبَل","وَطَن","مَدْرَسَة"], correct:3},
+{lvl:"sedang", soal:"مَنْ يَقُودُ السَّيَّارَةَ", opts:["جَبَل","بَحْر","مَدْرَسَة","سَائِق","مَاء"], correct:3},
+{lvl:"sedang", soal:"مَتْجَرٌ لِلْبَيْعِ وَالشِّرَاءِ", opts:["رَجُل","أَب","مَدْرَسَة","دُكَّان","طِفْل"], correct:3},
+{lvl:"sedang", soal:"رَفِيقٌ فِي الْعَمَلِ أَوِ الْمِهْنَةِ", opts:["تِلْمِيذ","مَدْرَسَة","أَب","طِفْل","زَمِيل"], correct:4},
+{lvl:"sedang", soal:"جَلَسَ بَعْدَ أَنْ كَانَ وَاقِفًا", opts:["قَعَدَ","مَدْرَسَة","زَمِيل","قَامَ","ذَهَبَ"], correct:0},
+{lvl:"sulit", soal:"الارْتِبَاطُ الشَّرْعِيُّ بَيْنَ ذَكَرٍ وَأُنْثَى", opts:["عَصِير","زَوَاج","حَيَاة","شِتَاء","عَدْل"], correct:1},
+{lvl:"sulit", soal:"دَوْلَةٌ يَرْأَسُهَا حَاكِمٌ مُنْتَخَبٌ", opts:["جُمْهُورِيَّة","قَرْيَة","مِينَاء","عَاصِمَة","مَدِينَة"], correct:0},
+{lvl:"sulit", soal:"يَطْلُبُ الْعَفْوَ وَالْمَغْفِرَةَ", opts:["اعْتَذَرَ","فَرَح","كَذَبَ","خَوْف","نَسِيَ"], correct:0},
+{lvl:"sulit", soal:"عِبَارَاتٌ تُقَالُ قَبْلَ الِافْتِرَاقِ", opts:["رَمَضَان","سَفَر","رَبِيع","وَدَاع","خَرِيف"], correct:3},
+{lvl:"sulit", soal:"اِمْرَأَةٌ كَبِيرَةٌ فِي السِّنِّ", opts:["عَجُوز","رَجُل","طِفْل","زَمِيل","رَمَضَان"], correct:0},
+{lvl:"sulit", soal:"أَوْرَاقٌ يَكْتُبُ فِيهَا لِلْمُرْسَلِ", opts:["عُجُوز","مَدْرَسَة","دُكَّان","رَسَائِل","طِفْل"], correct:3},
+{lvl:"sulit", soal:"الْأَخُ مِنْ نَفْسِ الْأَبِ وَالْأُمِّ", opts:["زَمِيل","شَقِيق","صَدِيق","طِفْل","جَار"], correct:1},
+{lvl:"sulit", soal:"شَخْصٌ لَهُ تَقْدِيرٌ وَمَحَبَّةٌ", opts:["زَمِيل","عَزِيز","صَاحِب","رَجُل","تِلْمِيذ"], correct:1},
+{lvl:"sulit", soal:"قِطْعَةٌ مِنَ الْقُمَاشِ يَلْبَسُهَا الْإِنْسَانُ", opts:["صَاحِب","صَيْف","ثَوْب","رَجُل","طِفْل"], correct:2},
+{lvl:"sulit", soal:"عُضْوٌ يَضُخُّ الدَّمَ فِي الصَّدْرِ", opts:["مُهَنْدِس","جِيل","سَمَكَة","مَلِك","قَلْب"], correct:4},
+{lvl:"sulit", soal:"مُتَفَانٍ فِي عَمَلِهِ", opts:["مُخْلِص","تِلْمِيذ","سَيِئ","مَاء","قَبْلَ"], correct:0},
+{lvl:"sulit", soal:"التَّرَدُّدُ، دَلِيلُ عَدَمِ الْيَقِينِ", opts:["مُهَنْدِس","شَكّ","صَيْف","مَاء","لَمَسَ"], correct:1},
+{lvl:"sulit", soal:"الْعَافِيَةُ وَالسَّلَامَةُ", opts:["جِيل","مَاء","شَجَرَة","صِحَّة","جَبَل"], correct:3},
+{lvl:"sulit", soal:"أَدَاةٌ تُسْتَخْدَمُ لِلْكِتَابَةِ", opts:["زَمِيل","طِفْل","قَلَم","مَدْرَسَة","دُكَّان"], correct:2},
+{lvl:"sulit", soal:"حَيَوَانٌ زَاحِفٌ فِي الْبَرِّ وَالْمَاءِ", opts:["جَمَل","أَسَد","سَمَكَة","تِمْسَاح","طَائِر"], correct:3},
+{lvl:"sulit", soal:"مُسَاعَدَةٌ وَمُعَاوَنَةٌ", opts:["قِطَار","نِظَام","ثَمَن","خِدْمَة","صِفْر"], correct:3},
+{lvl:"sulit", soal:"انْعِدَامُ الضَّوْءِ", opts:["ظَلَام","رَجُل","عَمَل","طِفْل","شَمْس"], correct:0},
 ];
 
-/* ---------- FAHMUL MASMU' TO2 ---------- */
 const MASMU = [
 {lvl:"mudah", audio:"audio1.mp3", questions:[
-  {soal:"مَعَ مَنْ يَذْهَبُ الْمُتَحَدِّثُ إِلَى السُّوقِ؟", opts:["أَبِيهِ","أُمِّهِ","أَخِيهِ","جَدِّهِ","صَدِيقِهِ"], correct:1},
-  {soal:"فِي أَيِّ يَوْمٍ يَذْهَبُونَ إِلَى السُّوقِ؟", opts:["الْجُمُعَة","السَّبْت","الْأَحَد","الْخَمِيس","الِاثْنَيْن"], correct:1},
-  {soal:"مَاذَا يَشْتَرُونَ؟", opts:["مَلَابِس","أَجْهِزَة","خُضْرَاوَات وَفَوَاكِه","أَثَاث","كُتُب"], correct:2},
-  {soal:"كَيْفَ الْبَائِعُ فِي السُّوقِ؟", opts:["غَاضِب","لَطِيف","مَشْغُول جِدًّا","بَخِيل","صَامِت"], correct:1},
-  {soal:"مَاذَا يُعْطِيهِمُ الْبَائِعُ؟", opts:["هَدَايَا","أَسْعَارًا مُنَاسِبَة","خِصْمًا كَبِيرًا جِدًّا","طَعَامًا مَجَّانًا","لَا شَيْء"], correct:1},
+  {soal:"مَا اسْمُ الطَّالِبِ؟", opts:["أَحْمَد","عُمَر","خَالِد","سَعِيد","يُوسُف"], correct:0},
+  {soal:"فِي أَيِّ صَفٍّ يَدْرُسُ أَحْمَدُ؟", opts:["الصَّفّ الثَّانِي","الصَّفّ الْأَوَّل الثَّانَوِيّ","الصَّفّ الثَّالِث","الِابْتِدَائِيّ","الْجَامِعَة"], correct:1},
+  {soal:"أَيْنَ يَسْكُنُ أَحْمَدُ؟", opts:["جَاكَرْتَا","بَانْدُونْج","سُورَابَايَا","مِيدَان","بُوغُور"], correct:0},
+  {soal:"كَمْ أَخًا وَأُخْتًا لِأَحْمَدَ؟", opts:["أَخَوَانِ وَأُخْت","أَخٌ وَاحِدٌ وَأُخْتَانِ","ثَلَاثَة إِخْوَة","أُخْت وَاحِدَة","لَا أَحَد"], correct:1},
+  {soal:"مَا مِهْنَةُ وَالِدِ أَحْمَدَ؟", opts:["مُهَنْدِس","مُدَرِّس","طَبِيب","تَاجِر","مُحَامٍ"], correct:2},
 ]},
 {lvl:"mudah", audio:"audio2.mp3", questions:[
-  {soal:"أَيْنَ يُصَلِّي الْمُتَحَدِّثُ الْفَجْرَ؟", opts:["فِي الْبَيْت","فِي الْمَسْجِدِ الْقَرِيب","فِي الْمَدْرَسَة","فِي السُّوق","لَا يُصَلِّي"], correct:1},
-  {soal:"مَعَ مَنْ يُصَلِّي؟", opts:["أَخِيهِ","صَدِيقِهِ","وَالِدِهِ","جَارِهِ","وَحْدَه"], correct:2},
-  {soal:"مَاذَا يَفْعَلُ الْإِمَامُ؟", opts:["يَخْطُبُ","يَقْرَأُ الْقُرْآنَ بِصَوْتٍ جَمِيل","يُغَنِّي","يَصْمُتُ","يَنَامُ"], correct:1},
-  {soal:"مَاذَا يَفْعَلُونَ بَعْدَ الصَّلَاةِ؟", opts:["يَذْهَبُونَ فَوْرًا","يَجْلِسُونَ لِلذِّكْر","يَتَنَاقَشُونَ بِصَوْتٍ عَالٍ","يَنَامُونَ فِي الْمَسْجِد","يَخْرُجُونَ لِلَّعِب"], correct:1},
-  {soal:"أَيَّ صَلَاةٍ يُصَلِّي الْمُتَحَدِّثُ؟", opts:["الظُّهْر","الْفَجْر","الْعَصْر","الْمَغْرِب","الْعِشَاء"], correct:1},
+  {soal:"فِي أَيِّ سَاعَةٍ يَسْتَيْقِظُ الْمُتَحَدِّثُ؟", opts:["السَّادِسَة","الْخَامِسَة","السَّابِعَة","الرَّابِعَة","الثَّامِنَة"], correct:1},
+  {soal:"مَاذَا يَفْعَلُ بَعْدَ الِاسْتِيقَاظِ مُبَاشَرَةً؟", opts:["يَتَنَاوَلُ الْفُطُور","يُصَلِّي","يَذْهَبُ لِلْمَدْرَسَة","يَنَامُ","يَقْرَأُ"], correct:1},
+  {soal:"مَعَ مَنْ يَتَنَاوَلُ الْفُطُورَ؟", opts:["أَصْدِقَاؤُهُ","وَحْدَه","أُسْرَتُهُ","جِيرَانُهُ","زُمَلَاؤُهُ"], correct:2},
+  {soal:"مَتَى يَذْهَبُ إِلَى الْمَدْرَسَةِ؟", opts:["السَّاعَة السَّادِسَة","السَّاعَة السَّابِعَة","السَّاعَة الثَّامِنَة","بَعْدَ الظُّهْر","مَسَاءً"], correct:1},
+  {soal:"مَاذَا يَفْعَلُ بَعْدَ الْعَوْدَةِ مِنَ الْمَدْرَسَةِ؟", opts:["يَذْهَبُ لِلسُّوق","يَسْتَرِيحُ قَلِيلًا","يَنَامُ طَوِيلًا","يَخْرُجُ مَعَ أَصْدِقَائِهِ","يُشَاهِدُ التِّلْفَاز"], correct:1},
 ]},
 {lvl:"mudah", audio:"audio3.mp3", questions:[
-  {soal:"أَيَّ رِيَاضَةٍ يُمَارِسُ الْمُتَحَدِّثُ؟", opts:["السِّبَاحَة","كُرَة الْقَدَم","كُرَة السَّلَّة","الْجَرْي","التِّنِس"], correct:1},
-  {soal:"مَعَ مَنْ يَلْعَبُ؟", opts:["إِخْوَتِهِ","أَصْدِقَائِهِ","زُمَلَاءِ الْعَمَل","وَحْدَه","جِيرَانِهِ فَقَط"], correct:1},
-  {soal:"أَيْنَ يَلْعَبُونَ؟", opts:["فِي الْبَيْت","فِي الْمَلْعَبِ الْقَرِيب","فِي الْمَدْرَسَة","فِي الْحَدِيقَة","فِي الشَّارِع"], correct:1},
-  {soal:"كَمْ سَاعَةً يَلْعَبُونَ؟", opts:["سَاعَة وَاحِدَة","سَاعَتَيْنِ","ثَلَاث سَاعَات","نِصْف سَاعَة","أَرْبَع سَاعَات"], correct:1},
-  {soal:"مَاذَا يَفْعَلُونَ بَعْدَ اللَّعِبِ؟", opts:["يَنَامُونَ فَوْرًا","يَشْرَبُونَ الْمَاءَ وَيَسْتَرِيحُونَ","يَعُودُونَ لِلْمَلْعَبِ","يَتَشَاجَرُونَ","يَذْهَبُونَ لِلسُّوق"], correct:1},
+  {soal:"مَاذَا يُوجَدُ فِي مَكْتَبَةِ الْمَدْرَسَةِ؟", opts:["أَلْعَاب","كُتُبٌ كَثِيرَة","أَجْهِزَة","أَطْعِمَة","مَلَابِس"], correct:1},
+  {soal:"مَتَى يَذْهَبُ الطُّلَّابُ إِلَى الْمَكْتَبَةِ؟", opts:["فِي بِدَايَةِ الْيَوْم","فِي وَقْتِ الِاسْتِرَاحَة","بَعْدَ الْمَدْرَسَة","فِي اللَّيْل","أَثْنَاءَ الِامْتِحَان"], correct:1},
+  {soal:"مَاذَا يَفْعَلُ الطُّلَّابُ فِي الْمَكْتَبَةِ؟", opts:["يَلْعَبُونَ","يَنَامُونَ","يَقْرَؤُونَ الْكُتُبَ","يَأْكُلُونَ","يَتَحَدَّثُونَ بِصَوْتٍ عَالٍ"], correct:2},
+  {soal:"مَتَى تُفْتَحُ الْمَكْتَبَةُ؟", opts:["السَّاعَة السَّابِعَة صَبَاحًا","السَّاعَة الثَّامِنَة","السَّاعَة التَّاسِعَة","الظُّهْر","بَعْدَ الْعَصْر"], correct:0},
+  {soal:"مَتَى تُغْلَقُ الْمَكْتَبَةُ؟", opts:["الظُّهْر","الْعَصْر","الْمَغْرِب","مُنْتَصَف اللَّيْل","لَا تُغْلَق"], correct:1},
 ]},
 {lvl:"mudah", audio:"audio4.mp3", questions:[
-  {soal:"مَا نَوْعُ الْمَكْتَبَةِ الْمَذْكُورَةِ؟", opts:["مَكْتَبَةٌ خَاصَّة","مَكْتَبَةٌ عَامَّة","مَكْتَبَةُ مَدْرَسَة","مَكْتَبَةُ جَامِعَة","لَا تُوجَد مَكْتَبَة"], correct:1},
-  {soal:"هَلْ زِيَارَةُ الْمَكْتَبَةِ مَجَّانِيَّةٌ؟", opts:["لَا، بِرَسْمٍ عَالٍ","نَعَمْ، مَجَّانِيَّة","فَقَط لِلْأَعْضَاء","بِرَسْمٍ رَمْزِيّ","غَيْر مَذْكُور"], correct:1},
-  {soal:"أَيْنَ تَقَعُ الْمَكْتَبَةُ؟", opts:["فِي مَدِينَةٍ بَعِيدَة","فِي حَيِّ الْمُتَحَدِّث","بِجَانِبِ الْمَسْجِد","دَاخِلَ الْمَدْرَسَة","غَيْر مَذْكُور"], correct:1},
-  {soal:"مَاذَا يُوجَدُ فِيهَا لِلْأَطْفَالِ؟", opts:["أَلْعَاب","قِسْمٌ خَاصّ","مَلْعَب","مَقْصَف","لَا شَيْء"], correct:1},
-  {soal:"مَا الْقِسْمُ الْآخَرُ الْمَذْكُورُ فِي الْمَكْتَبَةِ؟", opts:["الرِّوَايَات","الْكُتُب الْعِلْمِيَّة","الْمَجَلَّات","الصُّحُف","الْقَصَص"], correct:1},
+  {soal:"أَيْنَ يَقَعُ الْبَيْتُ؟", opts:["بَعِيدٌ عَنِ الْمَسْجِد","قَرِيبٌ مِنَ الْمَسْجِد","بِجَانِبِ الْمَدْرَسَة","فِي وَسَطِ الْمَدِينَة","بَعِيدٌ عَنِ السُّوق"], correct:1},
+  {soal:"مَاذَا تَزْرَعُ الْأُمُّ فِي الْحَدِيقَةِ؟", opts:["خُضْرَاوَات","أَشْجَار","أَزْهَار","فَوَاكِه","أَعْشَاب"], correct:2},
+  {soal:"مَنْ يُسَاعِدُ فِي تَنْظِيفِ الْحَدِيقَةِ؟", opts:["الْأُمّ","الْأُخْت","الْمُتَحَدِّث","الْجَار","الْأَخ"], correct:2},
+  {soal:"فِي أَيِّ يَوْمٍ يُنَظِّفُونَ الْحَدِيقَةَ؟", opts:["الْخَمِيس","الْجُمُعَة","السَّبْت","الْأَحَد","الِاثْنَيْن"], correct:1},
+  {soal:"مَاذَا يُوجَدُ فِي الْبَيْتِ؟", opts:["مَسْبَح","حَدِيقَة صَغِيرَة","مَكْتَبَة","مَلْعَب","مَرْأَب"], correct:1},
 ]},
 {lvl:"sedang", audio:"audio5.mp3", questions:[
-  {soal:"لِمَاذَا تَأَخَّرَ خَالِدٌ؟", opts:["نَامَ مُتَأَخِّرًا","بِسَبَبِ الْأَمْطَارِ وَالِازْدِحَام","نَسِيَ الْمَوْعِد","كَانَ مَرِيضًا","تَعَطَّلَتْ سَيَّارَتُهُ"], correct:1},
-  {soal:"مَاذَا سَبَّبَتِ الْأَمْطَارُ؟", opts:["تَعْطِيلَ الْمَدَارِس","ازْدِحَامًا فِي الطُّرُق","انْقِطَاعَ الْكَهْرَبَاء","إِغْلَاقَ الْمَكَاتِب","لَا شَيْء"], correct:1},
-  {soal:"مَاذَا فَعَلَ خَالِدٌ؟", opts:["تَجَاهَلَ الْمَوْقِف","اتَّصَلَ بِمُدِيرِهِ","اسْتَقَالَ مِنَ الْعَمَل","ذَهَبَ إِلَى بَيْتِهِ","لَا شَيْء"], correct:1},
-  {soal:"كَيْفَ كَانَ رَدُّ فِعْلِ الْمُدِيرِ؟", opts:["غَضِبَ كَثِيرًا","تَفَهَّمَ الْوَضْع","عَاقَبَهُ","تَجَاهَلَهُ","رَفَضَ الْعُذْر"], correct:1},
-  {soal:"مَتَى حَدَثَ هَذَا التَّأَخُّرُ؟", opts:["مَسَاءً","صَبَاحًا","لَيْلًا","بَعْدَ الظُّهْر","فِي عُطْلَةِ نِهَايَةِ الْأُسْبُوع"], correct:1},
+  {soal:"مَاذَا شَعَرَ سَامِي؟", opts:["أَلَمٌ فِي الْبَطْن","صُدَاعٌ وَارْتِفَاعٌ فِي الْحَرَارَة","أَلَمٌ فِي الرِّجْل","سُعَال فَقَط","لَا شَيْء"], correct:1},
+  {soal:"مَاذَا قَرَّرَتِ الْأُمُّ؟", opts:["إِعْطَاءَهُ دَوَاءً مِنَ الْبَيْت","أَخْذَهُ إِلَى الطَّبِيب","تَرْكَهُ يَنَام","الِاتِّصَال بِالْمَدْرَسَة","لَا شَيْء"], correct:1},
+  {soal:"بِمَاذَا شَخَّصَ الطَّبِيبُ حَالَةَ سَامِي؟", opts:["الْتِهَاب رِئَوِيّ","نَزْلَة بَرْدٍ بَسِيطَة","حُمَّى شَدِيدَة","مَرَضٌ خَطِير","لَا شَيْء"], correct:1},
+  {soal:"بِمَاذَا نَصَحَ الطَّبِيبُ سَامِي؟", opts:["بِالذَّهَابِ إِلَى الْمَدْرَسَة","بِشُرْبِ الْمَاءِ الدَّافِئِ وَالرَّاحَة","بِالسَّفَر","بِأَكْلِ الْحَلْوَى","بِمُمَارَسَةِ الرِّيَاضَة"], correct:1},
+  {soal:"كَمْ يَوْمًا يَحْتَاجُ سَامِي لِلرَّاحَةِ؟", opts:["يَوْمًا وَاحِدًا","يَوْمَيْنِ","ثَلَاثَة أَيَّام","أُسْبُوعًا","لَا يَحْتَاج رَاحَة"], correct:1},
 ]},
 {lvl:"sedang", audio:"audio6.mp3", questions:[
-  {soal:"مَاذَا أَصْبَحَتِ الْهَوَاتِفُ الذَّكِيَّةُ؟", opts:["شَيْئًا نَادِرًا","جُزْءًا مُهِمًّا مِنَ الْحَيَاةِ الْيَوْمِيَّة","غَيْرَ مُهِمَّة","مَمْنُوعَة","غَيْرَ مُتَاحَة"], correct:1},
-  {soal:"فِيمَ تُسْتَخْدَمُ الْهَوَاتِفُ الذَّكِيَّةُ حَسَبَ النَّصِّ؟", opts:["لِلطَّبْخِ فَقَط","لِلتَّوَاصُلِ وَالتَّعَلُّمِ وَالتَّرْفِيه","لِلنَّوْمِ فَقَط","لَا فَائِدَةَ لَهَا","لِلسَّفَرِ فَقَط"], correct:1},
-  {soal:"مَا الْمُشْكِلَةُ الَّتِي ذَكَرَهَا النَّصُّ؟", opts:["ثَمَنُهَا مُرْتَفِع","الْإِفْرَاطُ فِي اسْتِخْدَامِهَا","صُعُوبَةُ اسْتِخْدَامِهَا","نَدْرَتُهَا","عَدَمُ فَائِدَتِهَا"], correct:1},
-  {soal:"عَلَامَ يُؤَثِّرُ الْإِفْرَاطُ فِي الِاسْتِخْدَامِ؟", opts:["صِحَّةُ الْعَيْنَيْنِ وَالنَّوْم","صِحَّةُ الْقَلْب فَقَط","الذَّاكِرَة فَقَط","لَا تَأْثِيرَ لَهُ","الْمَظْهَر الْخَارِجِيّ"], correct:0},
-  {soal:"مَا مَوْضُوعُ النَّصِّ؟", opts:["تَارِيخُ الْهَوَاتِف","أَهَمِّيَّةُ الْهَوَاتِفِ الذَّكِيَّةِ وَمَخَاطِرِ الْإِفْرَاطِ فِيهَا","أَنْوَاعُ الْهَوَاتِف","أَسْعَارُ الْهَوَاتِف","شَرِكَاتُ الِاتِّصَالَات"], correct:1},
+  {soal:"إِلَى أَيْنَ سَافَرَتْ عَائِلَةُ رَشِيدٍ؟", opts:["بَالِي","يُوجْيَاكَرْتَا","بَانْدُونْج","لُومْبُوك","مِيدَان"], correct:1},
+  {soal:"مَتَى كَانَتِ الرِّحْلَةُ؟", opts:["عُطْلَةُ الشِّتَاء","عُطْلَةُ الصَّيْف","أَيَّامُ الدِّرَاسَة","رَمَضَان","بِدَايَةُ السَّنَة"], correct:1},
+  {soal:"أَيَّ مَكَانٍ سِيَاحِيٍّ زَارُوا؟", opts:["شَاطِئ","مَعْبَدُ بُورُوبُودُور","جَبَل","حَدِيقَةُ حَيَوَانَات","مَتْحَف"], correct:1},
+  {soal:"مَاذَا اشْتَرَوْا قَبْلَ الْعَوْدَةِ؟", opts:["مَلَابِس","هَدَايَا تَذْكَارِيَّة","أَطْعِمَة فَقَط","كُتُب","أَدَوَات"], correct:1},
+  {soal:"لِمَنِ اشْتَرَوُا الْهَدَايَا؟", opts:["لِأَصْدِقَائِهِمْ","لِأَقَارِبِهِمْ","لِجِيرَانِهِمْ","لِمُعَلِّمِيهِمْ","لِأَنْفُسِهِمْ"], correct:1},
 ]},
 {lvl:"sedang", audio:"audio7.mp3", questions:[
-  {soal:"عَلَامَ يَعْتَمِدُ سُكَّانُ الْقُرَى كَمَصْدَرِ رِزْقٍ؟", opts:["التِّجَارَة","الزِّرَاعَة","الصِّنَاعَة","السِّيَاحَة","الصَّيْد"], correct:1},
-  {soal:"مَاذَا يَزْرَعُونَ؟", opts:["الْقَمْح فَقَط","الْأَرُزَّ وَالْخُضْرَاوَات","الْفَوَاكِه فَقَط","الْقُطْن","الْبُنّ"], correct:1},
-  {soal:"عَلَى مَاذَا يَعْتَمِدُونَ لِلرِّيِّ؟", opts:["الْآبَارِ فَقَط","مِيَاهِ الْأَمْطَارِ وَالْأَنْهَار","مِيَاهِ الْبَحْر","لَا يَحْتَاجُونَ رِيًّا","أَنَابِيبِ الْمِيَاه"], correct:1},
-  {soal:"مَنْ يَعْتَمِدُ عَلَى الزِّرَاعَةِ حَسَبَ النَّصِّ؟", opts:["سُكَّانُ الْمُدُن","سُكَّانُ الْقُرَى","التُّجَّار فَقَط","الْمُوَظَّفُون","الطُّلَّاب"], correct:1},
-  {soal:"مَا مَوْضُوعُ النَّصِّ؟", opts:["التِّجَارَة الدَّوْلِيَّة","الزِّرَاعَةُ فِي الْقُرَى","الصِّنَاعَاتُ الْحَدِيثَة","السِّيَاحَةُ الرِّيفِيَّة","التَّعْلِيمُ فِي الْقُرَى"], correct:1},
+  {soal:"مِمَّ تُعَانِي كَثِيرٌ مِنَ الْمُدُنِ؟", opts:["قِلَّةُ الْمِيَاه","التَّلَوُّثُ الْبَيْئِيّ","الزِّحَام فَقَط","قِلَّةُ الْمَدَارِس","الْفَقْر"], correct:1},
+  {soal:"مَا سَبَبُ هَذِهِ الْمُشْكِلَةِ؟", opts:["قِلَّةُ الْأَمْطَار","دُخَانُ الْمَصَانِعِ وَالسَّيَّارَات","كَثْرَةُ الْأَشْجَار","الْحُرُوب","قِلَّةُ السُّكَّان"], correct:1},
+  {soal:"مَاذَا يَدْعُو إِلَيْهِ الْخُبَرَاءُ؟", opts:["بِنَاءُ مَصَانِعَ","زِرَاعَةُ الْأَشْجَارِ","زِيَادَةُ السَّيَّارَات","إِغْلَاقُ الْمَدَارِس","لَا شَيْء"], correct:1},
+  {soal:"لِمَاذَا يُنْصَحُ بِاسْتِخْدَامِ النَّقْلِ الْعَامِّ؟", opts:["لِأَنَّهُ أَرْخَص","لِلْحَدِّ مِنَ التَّلَوُّث","لِأَنَّهُ أَسْرَع","لِأَنَّهُ إِجْبَارِيّ","لَا سَبَبَ"], correct:1},
+  {soal:"مَنْ يَدْعُو إِلَى هَذِهِ الْحُلُولِ؟", opts:["الْحُكُومَة فَقَط","الْخُبَرَاء","الطُّلَّاب","التُّجَّار","الْأَطِبَّاء"], correct:1},
 ]},
 {lvl:"sulit", audio:"audio8.mp3", questions:[
-  {soal:"بِمَاذَا يَنْصَحُ أَطِبَّاءُ الْأَسْنَانِ؟", opts:["تَنْظِيفِ الْأَسْنَانِ مَرَّتَيْنِ يَوْمِيًّا وَتَقْلِيلِ السُّكَّرِيَّات","تَنَاوُلِ الْحَلْوَى يَوْمِيًّا","عَدَمِ تَنْظِيفِ الْأَسْنَان","زِيَارَةِ الطَّبِيبِ فَقَط عِنْدَ الْأَلَم","تَجَنُّبِ الْفَوَاكِه"], correct:0},
-  {soal:"كَمْ مَرَّةً يَنْبَغِي تَنْظِيفُ الْأَسْنَانِ يَوْمِيًّا؟", opts:["مَرَّةً وَاحِدَة","مَرَّتَيْنِ","ثَلَاثَ مَرَّات","أَرْبَعَ مَرَّات","لَا يَلْزَمُ ذَلِك"], correct:1},
-  {soal:"مَاذَا يَجِبُ تَقْلِيلُهُ لِلْوِقَايَةِ مِنَ التَّسَوُّسِ؟", opts:["الْبُرُوتِينَات","السُّكَّرِيَّات","الْخُضْرَاوَات","الْمَاء","الْفَوَاكِه"], correct:1},
-  {soal:"كُلَّ كَمْ مُدَّةٍ يُوصَى بِزِيَارَةِ طَبِيبِ الْأَسْنَانِ؟", opts:["كُلَّ شَهْر","كُلَّ سِتَّةِ أَشْهُر","كُلَّ سَنَتَيْنِ","مَرَّةً فِي الْعُمُر","كُلَّ أُسْبُوع"], correct:1},
-  {soal:"مَتَى يَنْبَغِي زِيَارَةُ الطَّبِيبِ حَسَبَ النَّصِّ؟", opts:["فَقَط عِنْدَ وُجُودِ أَلَم","حَتَّى لَوْ لَمْ يَكُنْ هُنَاكَ أَلَمٌ ظَاهِر","فَقَط بَعْدَ التَّسَوُّس","لَا دَاعِيَ لِلزِّيَارَة","فَقَط فِي الطُّفُولَة"], correct:1},
+  {soal:"عَمَّاذَا يَتَحَدَّثُ التَّقْرِيرُ؟", opts:["ارْتِفَاعُ أَسْعَارِ الْغِذَاءِ","انْخِفَاضُ الْأَسْعَار","نَقْصُ الْغِذَاء","أَزْمَةُ الْمِيَاه","البِطَالَة"], correct:0},
+  {soal:"مَتَى حَدَثَ هَذَا الِارْتِفَاعُ؟", opts:["مُنْذُ سَنَوَات","خِلَالَ الْأَشْهُرِ الْأَخِيرَة","فِي الْمَاضِي الْبَعِيد","غَيْر مُحَدَّد","فِي الْعَامِ الْقَادِم"], correct:1},
+  {soal:"مَنْ تَأَثَّرَ سَلْبًا بِهَذَا الِارْتِفَاعِ؟", opts:["الْأَثْرِيَاء فَقَط","ذَوُو الدَّخْلِ الْمَحْدُود","التُّجَّار","الْحُكُومَة","الْمُزَارِعُونَ"], correct:1},
+  {soal:"كَيْفَ تَأَثَّرَتْ قُدْرَةُ هَؤُلَاءِ الشِّرَائِيَّةُ؟", opts:["تَحَسَّنَتْ","تَأَثَّرَتْ سَلْبًا","لَمْ تَتَغَيَّرْ","زَادَتْ قَلِيلًا","غَيْر مَذْكُور"], correct:1},
+  {soal:"مَاذَا فَعَلَتِ الْحُكُومَةُ؟", opts:["تَجَاهَلَتِ الْمَشْكِلَة","اتَّخَذَتْ إِجْرَاءَاتٍ","رَفَعَتِ الْأَسْعَارَ","أَوْقَفَتِ الْاسْتِيرَاد","لَا شَيْء"], correct:1},
 ]},
 {lvl:"sulit", audio:"audio9.mp3", questions:[
-  {soal:"مَتَى تَأَسَّسَتْ مَدِينَةُ الْقَاهِرَةِ؟", opts:["الْقَرْنُ الثَّامِن","الْقَرْنُ الْعَاشِر","الْقَرْنُ الثَّانِي عَشَر","الْقَرْنُ الْخَامِس عَشَر","غَيْر مَذْكُور"], correct:1},
-  {soal:"مَنْ أَسَّسَ مَدِينَةَ الْقَاهِرَةِ؟", opts:["صَلَاحُ الدِّين","جَوْهَرٌ الصِّقِلِّيّ","عَمْرُو بْنُ الْعَاص","هَارُونُ الرَّشِيد","لَا أَحَد"], correct:1},
-  {soal:"مَاذَا أَصْبَحَتِ الْقَاهِرَةُ فِيمَا بَعْدُ؟", opts:["مَدِينَةً مَهْجُورَة","مَرْكَزًا سِيَاسِيًّا وَثَقَافِيًّا","قَرْيَةً صَغِيرَة","مِينَاءً تِجَارِيًّا فَقَط","لَا شَيْء"], correct:1},
-  {soal:"أَيْنَ يَقَعُ هَذَا الْمَرْكَزُ الْمُهِمُّ حَسَبَ النَّصِّ؟", opts:["فِي أُورُوبَّا","فِي الْعَالَمِ الْإِسْلَامِيِّ","فِي آسْيَا الشَّرْقِيَّة","فِي أَمْرِيكَا","غَيْر مُحَدَّد"], correct:1},
-  {soal:"هَلْ لَا تَزَالُ الْقَاهِرَةُ تَحْتَفِظُ بِمَعَالِمِهَا التَّارِيخِيَّةِ؟", opts:["لَا، اخْتَفَتْ كُلُّهَا","نَعَمْ","جُزْئِيًّا فَقَط فِي مُتْحَف","غَيْر مَذْكُور","لَا يُعْرَف"], correct:1},
+  {soal:"مَاذَا يَرَى بَعْضُ التَّرْبَوِيِّينَ فِي التِّقْنِيَّاتِ؟", opts:["مُفِيدَةٌ دَائِمًا","تُضْعِفُ التَّفْكِيرَ الْمُسْتَقِلّ","يَجِبُ مَنْعُهَا","لَا فَرْقَ بِهَا","غَيْرُ مُهِمَّة"], correct:1},
+  {soal:"مَا رَأْيُ الْفَرِيقِ الْآخَرِ؟", opts:["يَرْفُضُونَهَا","تُتِيحُ فُرَصًا تَعْلِيمِيَّةً","لَا رَأْيَ لَهُم","يُفَضِّلُونَ التَّقْلِيدِيَّةَ","ضَارَّةٌ دَائِمًا"], correct:1},
+  {soal:"مَا الشَّرْطُ لِلِاسْتِفَادَةِ مِنَ التِّقْنِيَّاتِ؟", opts:["أَنْ تَكُونَ مَجَّانِيَّة","أَنْ يُحْسَنَ اسْتِخْدَامُهَا","أَنْ تَكُونَ حَدِيثَةً","أَنْ يَسْتَخْدِمَهَا الْجَمِيع","لَا شَرْطَ"], correct:1},
+  {soal:"عَلَامَ يُرَكِّزُ الرَّأْيُ الْأَوَّلُ؟", opts:["زِيَادَةُ فُرَصِ التَّعَلُّم","إِضْعَافُ التَّفْكِيرِ الْمُسْتَقِلّ","خَفْضُ التَّكَالِيفِ","تَحْسِينُ الْمَهَارَاتِ","لَا شَيْء"], correct:1},
+  {soal:"مَا مَوْضُوعُ النَّصِّ بِشَكْلٍ عَامٍّ؟", opts:["تَارِيخُ الْتَّعْلِيم","أَثَرُ التِّقْنِيَّاتِ الْحَدِيثَةِ","مَشَاكِلُ الْمُعَلِّمِين","أَنْوَاعُ الْمَدَارِس","تَمْوِيلُ التَّعْلِيم"], correct:1},
 ]},
 {lvl:"sulit", audio:"audio10.mp3", questions:[
-  {soal:"نَحْوَ مَاذَا تَتَّجِهُ كَثِيرٌ مِنَ الدُّوَلِ؟", opts:["زِيَادَةُ اسْتِخْدَامِ الْوَقُودِ الْأُحْفُورِيّ","اسْتِخْدَامُ مَصَادِرِ الطَّاقَةِ الْمُتَجَدِّدَة","تَقْلِيلُ الطَّاقَةِ الشَّمْسِيَّة","إِيقَافُ اسْتِخْدَامِ الطَّاقَة","لَا شَيْء"], correct:1},
-  {soal:"مَا مِثَالَانِ عَلَى الطَّاقَةِ الْمُتَجَدِّدَةِ فِي النَّصِّ؟", opts:["الْفَحْمُ وَالنَّفْط","الطَّاقَةُ الشَّمْسِيَّةُ وَطَاقَةُ الرِّيَاح","الْغَازُ الطَّبِيعِيّ","الطَّاقَةُ النَّوَوِيَّة","لَا مِثَالَ مَذْكُور"], correct:1},
-  {soal:"بَدَلًا مِنْ مَاذَا تُسْتَخْدَمُ هَذِهِ الْمَصَادِرُ؟", opts:["الطَّاقَةِ الشَّمْسِيَّة","الْوَقُودِ الْأُحْفُورِيّ","طَاقَةِ الرِّيَاح","الْمَاء","لَا شَيْء"], correct:1},
-  {soal:"مَا الْهَدَفُ مِنَ التَّحَوُّلِ إِلَى الطَّاقَةِ الْمُتَجَدِّدَةِ؟", opts:["زِيَادَةُ الْأَرْبَاح فَقَط","تَقْلِيلُ التَّلَوُّثِ وَالْحَفَاظُ عَلَى الْبِيئَة","زِيَادَةُ السُّكَّان","تَقْلِيلُ عَدَدِ الْمَصَانِع","لَا هَدَفَ مُحَدَّد"], correct:1},
-  {soal:"لِمَنْ يُرَادُ الْحَفَاظُ عَلَى الْبِيئَةِ حَسَبَ النَّصِّ؟", opts:["لِلْحُكُومَاتِ فَقَط","لِلْأَجْيَالِ الْقَادِمَة","لِلشَّرِكَاتِ فَقَط","لَا أَحَد","لِلسُّيَّاح فَقَط"], correct:1},
+  {soal:"عَمَّ يَتَحَدَّثُ النَّصُّ؟", opts:["تَارِيخُ الْمَسَاجِد","مَخْطُوطَاتُ الْقُرْآنِ","أَنْوَاعُ الْخُطُوطِ","تَرْجَمَةُ الْقُرْآن","طِبَاعَةُ الْكُتُب"], correct:1},
+  {soal:"مَاذَا تُظْهِرُ هَذِهِ الْمَخْطُوطَاتُ؟", opts:["تَطَوُّرَ الْخَطِّ الْعَرَبِيّ","تَارِيخَ الْحُرُوب","أَسْمَاءَ الْمُلُوك","خَرَائِطَ قَدِيمَة","أَنْوَاعَ الْأَقْمِشَة"], correct:0},
+  {soal:"مَنْ حَافَظَ عَلَى هَذِهِ الْمَخْطُوطَاتِ؟", opts:["الْمُسْتَشْرِقُونَ","الْمُسْلِمُونَ","الْحُكُومَاتُ","الْمُتَاحِفُ الْغَرْبِيَّة","لَا أَحَد"], correct:1},
+  {soal:"مَاذَا اتَّبَعَ الْكَتَبَةُ فِي كُلِّ عَصْرٍ؟", opts:["لُغَاتٍ مُخْتَلِفَة","طُرُقَ نَسْخٍ مُخْتَلِفَة","أَلْوَانًا مُخْتَلِفَة","أَحْجَامًا وَاحِدَة","لَا شَيْء"], correct:1},
+  {soal:"لِمَاذَا تُعَدُّ هَذِهِ الْمَخْطُوطَاتُ مُهِمَّةً؟", opts:["لِأَنَّهَا وَثَائِقُ تَارِيخِيَّةٌ","لِأَنَّهَا رَخِيصَةٌ","لِأَنَّهَا حَدِيثَةٌ","لِأَنَّهَا بِالْإِنْجِلِيزِيَّة","لَا سَبَبَ مُهِمّ"], correct:0},
 ]},
 ];
 
@@ -351,7 +395,7 @@ const MASMU = [
 const PAGES = [];
 MASMU.forEach((passage, pi)=>{
   PAGES.push({ section:'masmu', lvl:passage.lvl, audio:passage.audio,
-    items: passage.questions.map((q,qi)=>({...q, qid:'masmu-'+pi+'-'+qi})) });
+    items: passage.questions.map((q,qi)=>({...q, qid:'masmu-'+pi-'+'+qi})) });
 });
 for(let i=0;i<TARAKIB.length;i+=5){
   PAGES.push({ section:'tarakib', items: TARAKIB.slice(i,i+5).map((q,idx)=>({...q, qid:'tarakib-'+(i+idx)})) });
@@ -456,8 +500,6 @@ function renderPage(){
   const page = PAGES[currentPage];
   const main = document.getElementById('quiz-main');
   main.innerHTML = '';
-  
-  // PERUBAHAN: Tag Kategori Menyesuaikan SECTION_LABEL
   const tag = document.createElement('div');
   tag.className = 'section-tag';
   tag.textContent = SECTION_LABEL[page.section];
@@ -466,25 +508,27 @@ function renderPage(){
   if(page.audio){
     const p = document.createElement('div');
     p.className = 'passage';
-    // PERUBAHAN: Label audio menjadi Istima'
-    p.innerHTML = `<div class="tlabel">🔊 Audio Istima'</div><audio controls src="${page.audio}" style="width:100%;"></audio>`;
+    p.innerHTML = `<div class="tlabel">🔊 Audio Istima'</div><audio controls src="${page.audio}" style="width:100%; height:40px;"></audio>`;
     main.appendChild(p);
   }
-  
+
   page.items.forEach((q)=>{
     const div = document.createElement('div');
     div.className = 'q';
     div.dataset.qid = q.qid;
     div.dataset.correct = q.correct;
     const globalNum = getGlobalNum(q.qid);
-    const opts = q.opts.map((o,i2)=>`<div data-idx="${i2}"><span class="huruf">${HURUF[i2]}</span>${o}</div>`).join('');
+    
+    // Keamanan ekstra untuk memastikan hanya tepat 5 opsi yang tergenerate (A, B, C, D, E)
+    const optsHtml = q.opts.slice(0, 5).map((o,i2)=>`<div data-idx="${i2}"><span class="huruf">${HURUF[i2]}</span>${o}</div>`).join('');
+    
     div.innerHTML = `
       <div class="q-head">
         <span class="q-num">Soal ${globalNum}</span>
         ${q.lvl ? `<span class="lvl ${q.lvl}">${LVL_LABEL[q.lvl]}</span>` : ''}
       </div>
       <div class="soal">${q.soal}</div>
-      <div class="opsi">${opts}</div>
+      <div class="opsi">${optsHtml}</div>
     `;
     if(revealedPages.has(currentPage)) div.classList.add('revealed');
     div.querySelectorAll('.opsi div').forEach(optEl=>{
@@ -494,7 +538,8 @@ function renderPage(){
         if(ci === q.correct) optEl.classList.add('correct');
         if(ci === answers[q.qid] && ci !== q.correct) optEl.classList.add('wrong');
       }
-      optEl.addEventListener('click', ()=>{
+      optEl.addEventListener('click', (e)=>{
+        e.stopPropagation();
         if(revealedPages.has(currentPage) || locked) return;
         answers[q.qid] = parseInt(optEl.dataset.idx);
         div.querySelectorAll('.opsi div').forEach(o=>o.classList.remove('selected'));
@@ -569,7 +614,6 @@ function showResult(){
   document.getElementById('quiz-screen').classList.remove('active');
   document.getElementById('result-screen').classList.add('active');
   
-  // Tampilkan Email Peserta di Halaman Hasil
   document.getElementById('result-email-label').textContent = userEmail;
 
   let totalCorrect = 0;
@@ -580,7 +624,6 @@ function showResult(){
       if(answers[q.qid] === q.correct){ totalCorrect++; bySection[page.section].c++; }
     });
   });
-  
   document.getElementById('score-big').textContent = totalCorrect + '/' + TOTAL_Q;
   const table = document.getElementById('score-table');
   table.innerHTML = '';
@@ -591,27 +634,22 @@ function showResult(){
   });
 }
 
-// FUNGSI UNDUH PDF
 document.getElementById('download-pdf-btn').addEventListener('click', ()=>{
   const element = document.getElementById('result-content');
   const opt = {
     margin:       [0.5, 0.5, 0.5, 0.5],
-    filename:     'Hasil_TryOut2_' + userEmail + '.pdf',
+    filename:     'Hasil_TryOut1_' + userEmail + '.pdf',
     image:        { type: 'jpeg', quality: 0.98 },
     html2canvas:  { scale: 2 },
     jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
   };
-  // Library akan mencetak elemen ber-ID 'result-content' menjadi PDF
   html2pdf().set(opt).from(element).save();
 });
 
-// FUNGSI KIRIM EMAIL
 document.getElementById('send-email-btn').addEventListener('click', ()=>{
   const score = document.getElementById('score-big').textContent;
-  const subject = encodeURIComponent("Hasil Try Out 2 - Tes Hamzah");
-  const body = encodeURIComponent(`Halo,\n\nBerikut adalah hasil Try Out 2 Anda:\n\nEmail Peserta: ${userEmail}\nSkor Total: ${score}\n\nTerima kasih telah mengikuti Try Out.`);
-  
-  // Membuka aplikasi email bawaan peserta dengan pesan yang sudah terisi otomatis
+  const subject = encodeURIComponent("Hasil Try Out 1 - Tes Hamzah");
+  const body = encodeURIComponent(`Halo,\n\nBerikut adalah hasil Try Out 1 Anda:\n\nEmail Peserta: ${userEmail}\nSkor Total: ${score}\n\nTerima kasih telah mengikuti Try Out.`);
   window.location.href = `mailto:${userEmail}?subject=${subject}&body=${body}`;
 });
 
